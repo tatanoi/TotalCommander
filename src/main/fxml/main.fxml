@@ -5,7 +5,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,19 +13,25 @@
 
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.MainController">
    <center>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-             <fx:include source="processPanel.fxml" />
-             <fx:include source="processPanel.fxml" GridPane.columnIndex="1"/>
-         </children>
-      </GridPane>
+       <GridPane BorderPane.alignment="CENTER">
+           <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="40" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+           <fx:include source="processPanel.fxml" />
+           <VBox alignment="CENTER" spacing="5.0" GridPane.columnIndex="1">
+            <children>
+               <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="imageButton" stylesheets="@../css/lvStyles.css" />
+               <Button layoutX="15.0" layoutY="10.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="imageButton" stylesheets="@../css/lvStyles.css" />
+               <Button layoutX="15.0" layoutY="35.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="imageButton" stylesheets="@../css/lvStyles.css" />
+               <Button layoutX="15.0" layoutY="60.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="imageButton" stylesheets="@../css/lvStyles.css" />
+            </children></VBox>
+           <fx:include source="processPanel.fxml" GridPane.columnIndex="2" />
+       </GridPane>
    </center>
    <top>
       <VBox prefHeight="64.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -52,7 +57,7 @@
             </MenuBar>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
+                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="imageButton" stylesheets="@../css/lvStyles.css" />
               </items>
             </ToolBar>
          </children>

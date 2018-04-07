@@ -1,23 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.ProcessController">
    <children>
-      <ComboBox prefWidth="150.0" />
-      <TextField />
+      <ComboBox prefHeight="25.0" prefWidth="95.0">
+         <VBox.margin>
+            <Insets left="5.0" top="5.0" />
+         </VBox.margin></ComboBox>
+      <HBox prefHeight="6.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="btnBack" mnemonicParsing="false" prefWidth="30.0" text="&lt;">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btnForward" mnemonicParsing="false" prefWidth="30.0" text="&gt;" />
+            <Button fx:id="btnForward1" mnemonicParsing="false" prefWidth="30.0" text="^">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Button>
+            <TextField fx:id="textField" layoutX="10.0" prefHeight="25.0" prefWidth="138.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </HBox>
       <TreeTableView fx:id="treeTableView" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
          <columns>
-            <TreeTableColumn fx:id="columnName" prefWidth="325" text="Name" />
+            <TreeTableColumn fx:id="columnName" prefWidth="290" text="Name" />
             <TreeTableColumn fx:id="columnExtension" prefWidth="50" text="Ext" />
-            <TreeTableColumn fx:id="columnSize" prefWidth="75" text="Size" />
+            <TreeTableColumn fx:id="columnSize" prefWidth="60" text="Size" />
             <TreeTableColumn fx:id="columnDate" prefWidth="100" text="Date" />
-            <TreeTableColumn fx:id="columnAttribute" prefWidth="40" text="Attr" />
+            <TreeTableColumn fx:id="columnAttribute" prefWidth="50" text="Attr" />
          </columns>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
       </TreeTableView>
    </children>
 </VBox>
