@@ -1,22 +1,21 @@
 package main.controllers;
 
-import com.sun.deploy.util.StringUtils;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.util.StringConverter;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class ProcessController {
 
@@ -39,7 +38,7 @@ public class ProcessController {
     @FXML
     TextField textField;
     @FXML
-    ComboBox comboBoxDrive;
+    ComboBox<ComboBoxValue> comboBoxDrive;
 
     @FXML
     public void initialize() {
@@ -70,13 +69,21 @@ public class ProcessController {
         });
         columnAttribute.setCellValueFactory(param -> {
             File file = param.getValue().getValue();
-            return new SimpleStringProperty(file.isHidden() ? "Hidden" : "");
+            String result = "";
+            result += file.isHidden() ? "H " : " ";
+            result += Files.isReadable(file.toPath()) ? "R" : "UR";
+            return new SimpleStringProperty(result);
         });
 
+        //---------------------- TEXT FIELD --------------------------//
         textField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER){
                 String path = textField.getText();
-                if (Files.isDirectory((Paths.get(path)))) {
+                if (path.charAt(path.length() - 1) != File.separatorChar) {
+                    path += File.separatorChar;
+                }
+                File file = new File(path);
+                if (file.exists() && file.isDirectory()) {
                     changeDirectory(path);
                 }
                 else {
@@ -84,6 +91,27 @@ public class ProcessController {
                 }
             }
         });
+
+        //---------------------- COMBO BOX ---------------------------//
+        comboBoxDrive.setItems(FXCollections.observableArrayList(getComboBoxValues()));
+        comboBoxDrive.setConverter(new StringConverter<ComboBoxValue>() {
+            @Override
+            public String toString(ComboBoxValue object) {
+                return object.value.getAbsolutePath();
+            }
+
+            @Override
+            public ComboBoxValue fromString(String string) {
+                return null;
+            }
+        });
+        comboBoxDrive.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.value.isDirectory() && newValue.isActiveChangeListener) {
+                changeDirectory(newValue.value.getAbsolutePath());
+            }
+            newValue.isActiveChangeListener = true;
+        });
+        comboBoxDrive.getSelectionModel().selectFirst();
 
         treeTableView.setOnMouseClicked(event -> {
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {
@@ -93,16 +121,20 @@ public class ProcessController {
                 }
             }
         });
-
-        changeDirectory("E:/");
     }
 
 
-    public void changeDirectory(String path) {
+    private void changeDirectory(String path, boolean activeComboBox) {
 
         File fileNode = new File(path);
         File[] children = fileNode.listFiles();
         TreeItem<File> root = new TreeItem<>(fileNode);
+
+        ComboBoxValue result = getRootDrive(fileNode.getAbsolutePath());
+        if (result != null) {
+            result.isActiveChangeListener = activeComboBox;
+            comboBoxDrive.getSelectionModel().select(result);
+        }
 
         assert children != null : "Children is null";
         for (File file : children) {
@@ -124,7 +156,24 @@ public class ProcessController {
         textField.setText(fileNode.getAbsolutePath());
     }
 
-    public static String getFileExtension(String fullName) {
+
+    private void changeDirectory(String path) {
+       changeDirectory(path, false);
+    }
+
+
+    private ComboBoxValue getRootDrive(String child) {
+        for (ComboBoxValue comboBoxValue : comboBoxDrive.getItems()) {
+            if (child.startsWith(comboBoxValue.value.getAbsolutePath()) ||
+                    comboBoxValue.value.getAbsolutePath().startsWith(child)) {
+                return  comboBoxValue;
+            }
+        }
+        return null;
+    }
+
+
+    private String getFileExtension(String fullName) {
         if (fullName != null) {
             String fileName = new File(fullName).getName();
             int dotIndex = fileName.lastIndexOf('.');
@@ -133,10 +182,38 @@ public class ProcessController {
         return null;
     }
 
+
+    private ArrayList<ComboBoxValue> getComboBoxValues() {
+        ArrayList<ComboBoxValue> values = new ArrayList<>();
+        for (int i = 0; i < File.listRoots().length; i++) {
+            if (File.listRoots()[i].isDirectory()) {
+                values.add(new ComboBoxValue(File.listRoots()[i], true));
+            }
+        }
+        return values;
+    }
+
+
     public void backToParent() {
         File current = treeTableView.getRoot().getValue();
         if (current.toPath().getNameCount() != 0) {
             changeDirectory(current.getParent());
+        }
+    }
+
+
+    public class ComboBoxValue {
+        File value;
+        boolean isActiveChangeListener;
+
+        public ComboBoxValue(File value) {
+            this.value = value;
+            this.isActiveChangeListener = false;
+        }
+
+        ComboBoxValue(File value, boolean isActiveChangeListener) {
+            this.value = value;
+            this.isActiveChangeListener = isActiveChangeListener;
         }
     }
 }
