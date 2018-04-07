@@ -6,16 +6,16 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 
 public class ProcessController {
@@ -36,7 +36,10 @@ public class ProcessController {
     TreeTableColumn<File, String> columnDate;
     @FXML
     TreeTableColumn<File, String> columnAttribute;
-
+    @FXML
+    TextField textField;
+    @FXML
+    ComboBox comboBoxDrive;
 
     @FXML
     public void initialize() {
@@ -70,6 +73,17 @@ public class ProcessController {
             return new SimpleStringProperty(file.isHidden() ? "Hidden" : "");
         });
 
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER){
+                String path = textField.getText();
+                if (Files.isDirectory((Paths.get(path)))) {
+                    changeDirectory(path);
+                }
+                else {
+                    textField.setText(treeTableView.getRoot().getValue().getAbsolutePath());
+                }
+            }
+        });
 
         treeTableView.setOnMouseClicked(event -> {
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {
@@ -107,6 +121,7 @@ public class ProcessController {
 
         treeTableView.setRoot(root);
         treeTableView.setShowRoot(false);
+        textField.setText(fileNode.getAbsolutePath());
     }
 
     public static String getFileExtension(String fullName) {
@@ -116,5 +131,12 @@ public class ProcessController {
             return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
         }
         return null;
+    }
+
+    public void backToParent() {
+        File current = treeTableView.getRoot().getValue();
+        if (current.toPath().getNameCount() != 0) {
+            changeDirectory(current.getParent());
+        }
     }
 }

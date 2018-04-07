@@ -39,8 +39,10 @@
     -fx-background-size: 20 20;
     -fx-background-repeat: no-repeat;
     -fx-background-position:center;
-    -fx-background-image: url("../images/folder.png");
+    /*-fx-background-image: url("../images/folder.png");*/
 }
+
+.btnIconNext { -fx-background-image: url("../images/folder.png"); }
 
 /*
 #btn {

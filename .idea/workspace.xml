@@ -2,18 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFXSample/main/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/controllers/ProcessController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFXSample/main/controllers/ProcessController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/controllers/file.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/css/lvStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFXSample/main/css/lvStyles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/fxml/file.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/fxml/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFXSample/main/fxml/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/fxml/processPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFXSample/main/fxml/processPanel.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaFXSample/main/images/file.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/controllers/ProcessController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/controllers/ProcessController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/controllers/file.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/css/lvStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/css/lvStyles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/fxml/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/fxml/main.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/fxml/processPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/fxml/processPanel.fxml" afterDir="false" />
@@ -74,34 +67,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/Main.java">
+      <file leaf-file-name="ProcessController.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/controllers/ProcessController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="59" lean-forward="true" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+            <state relative-caret-position="207">
+              <caret line="75" column="34" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1255#1557#0" />
+                <element signature="e#1599#1894#0" />
+                <element signature="e#1936#2164#0" />
+                <element signature="e#2211#2362#0" />
+                <element signature="e#2378#2499#0" />
+                <element signature="method#getFileExtension#0;class#ProcessController#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="processPanel.fxml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/fxml/processPanel.fxml">
-          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="44" column="18" lean-forward="true" selection-start-line="44" selection-start-column="18" selection-end-line="44" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.fxml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.fxml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/fxml/main.fxml">
           <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
           <provider editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="59" column="119" selection-start-line="59" selection-start-column="119" selection-end-line="59" selection-end-column="119" />
+            <state relative-caret-position="484">
+              <caret line="68" column="13" lean-forward="true" selection-start-line="68" selection-start-column="13" selection-end-line="68" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -109,10 +98,16 @@
       <file leaf-file-name="lvStyles.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/css/lvStyles.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="41" column="54" selection-start-line="41" selection-start-column="54" selection-end-line="41" selection-end-column="54" />
+            <state relative-caret-position="315">
+              <caret line="44" column="12" selection-start-line="44" selection-start-column="1" selection-end-line="44" selection-end-column="12" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="processPanel.fxml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/fxml/processPanel.fxml">
+          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+          <provider editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -155,16 +150,16 @@
         <option value="$PROJECT_DIR$/src/main/controllers/MainController.java" />
         <option value="$PROJECT_DIR$/src/main/fxml/workspace.fxml" />
         <option value="$PROJECT_DIR$/src/main/controllers/WorkspaceController.java" />
-        <option value="$PROJECT_DIR$/src/main/controllers/ProcessController.java" />
         <option value="$PROJECT_DIR$/src/main/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/fxml/processPanel.fxml" />
         <option value="$PROJECT_DIR$/src/main/css/lvStyles.css" />
         <option value="$PROJECT_DIR$/src/main/fxml/main.fxml" />
+        <option value="$PROJECT_DIR$/src/main/fxml/processPanel.fxml" />
+        <option value="$PROJECT_DIR$/src/main/controllers/ProcessController.java" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1386" />
@@ -181,6 +176,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -198,6 +194,13 @@
               <item name="TotalCommander" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TotalCommander" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TotalCommander" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TotalCommander" type="b2602c69:ProjectViewProjectNode" />
@@ -226,7 +229,6 @@
       </pane>
       <pane id="Scope" />
       <pane id="AndroidView" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -370,6 +372,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -380,11 +383,11 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.3290938" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" auto_hide="true" id="Run" order="2" type="SLIDING" weight="0.3290938" />
+      <window_info active="true" anchor="bottom" auto_hide="true" id="Run" order="2" type="SLIDING" visible="true" weight="0.3290938" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.21742313" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.21742313" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -394,10 +397,10 @@
       <window_info anchor="right" id="JetGradle" order="3" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3290938" />
       <window_info anchor="bottom" id="Changes" order="7" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Profiler" order="7" />
       <window_info anchor="bottom" id="Problems" order="7" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -414,7 +417,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="15" />
+      <option name="time" value="17" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -422,12 +425,35 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="59" lean-forward="true" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/css/lvStyles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" column="36" lean-forward="true" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/controllers/ProcessController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1255#1557#0" />
+            <element signature="e#1599#1894#0" />
+            <element signature="e#1936#2164#0" />
+            <element signature="e#2211#2362#0" />
+            <element signature="e#2378#2499#0" />
+            <element signature="method#getFileExtension#0;class#ProcessController#0" />
           </folding>
         </state>
       </provider>
@@ -526,13 +552,6 @@
     <entry file="file://$PROJECT_DIR$/src/sample/FileNode.java" />
     <entry file="file://$PROJECT_DIR$/src/sample/Controller.java" />
     <entry file="file://$PROJECT_DIR$/src/sample/MainPain.java" />
-    <entry file="jar://E:/Program/Java/jdk1.8.0_152/javafx-src.zip!/javafx/util/Callback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="51" column="13" selection-start-line="51" selection-start-column="13" selection-end-line="51" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://E:/Program/Java/jdk1.8.0_152/javafx-src.zip!/javafx/scene/control/TreeTableColumn.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -564,16 +583,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/controllers/ProcessController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/controllers/WorkspaceController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
@@ -584,14 +593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/fxml/workspace.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="38" lean-forward="true" selection-start-column="38" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/controllers/MainController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -599,13 +600,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/css/a.xsl">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/src/main/fxml/main.fxml">
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="68" column="13" lean-forward="true" selection-start-line="68" selection-start-column="13" selection-end-line="68" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://E:/Program/Java/jdk1.8.0_152/javafx-src.zip!/javafx/util/Callback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="51" column="13" selection-start-line="51" selection-start-column="13" selection-end-line="51" selection-end-column="13" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="59" lean-forward="true" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+        <state relative-caret-position="357">
+          <caret line="21" column="37" lean-forward="true" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -614,24 +627,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/fxml/processPanel.fxml">
       <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="44" column="18" lean-forward="true" selection-start-line="44" selection-start-column="18" selection-end-line="44" selection-end-column="18" />
-        </state>
-      </provider>
+      <provider editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/css/lvStyles.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="41" column="54" selection-start-line="41" selection-start-column="54" selection-end-line="41" selection-end-column="54" />
+        <state relative-caret-position="315">
+          <caret line="44" column="12" selection-start-line="44" selection-start-column="1" selection-end-line="44" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/fxml/main.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="59" column="119" selection-start-line="59" selection-start-column="119" selection-end-line="59" selection-end-column="119" />
+    <entry file="file://$PROJECT_DIR$/src/main/controllers/ProcessController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="75" column="34" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1255#1557#0" />
+            <element signature="e#1599#1894#0" />
+            <element signature="e#1936#2164#0" />
+            <element signature="e#2211#2362#0" />
+            <element signature="e#2378#2499#0" />
+            <element signature="method#getFileExtension#0;class#ProcessController#0" />
+          </folding>
         </state>
       </provider>
     </entry>

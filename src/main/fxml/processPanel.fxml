@@ -11,7 +11,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.ProcessController">
    <children>
-      <ComboBox prefHeight="25.0" prefWidth="95.0">
+      <ComboBox fx:id="comboBoxDrive" prefHeight="25.0" prefWidth="95.0">
          <VBox.margin>
             <Insets left="5.0" top="5.0" />
          </VBox.margin></ComboBox>
@@ -23,7 +23,7 @@
                </HBox.margin>
             </Button>
             <Button fx:id="btnForward" mnemonicParsing="false" prefWidth="30.0" text="&gt;" />
-            <Button fx:id="btnForward1" mnemonicParsing="false" prefWidth="30.0" text="^">
+            <Button mnemonicParsing="false" onAction="#backToParent" prefWidth="30.0" text="^">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>

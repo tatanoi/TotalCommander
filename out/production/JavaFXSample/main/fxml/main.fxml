@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -57,7 +58,11 @@
             </MenuBar>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="imageButton" stylesheets="@../css/lvStyles.css" />
+                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" stylesheets="@../css/lvStyles.css">
+                     <styleClass>
+                        <String fx:value="imageButton" />
+                        <String fx:value="btnIconNext" />
+                     </styleClass></Button>
               </items>
             </ToolBar>
          </children>
