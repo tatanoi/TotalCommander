@@ -13,7 +13,11 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -124,6 +128,44 @@ public class ProcessController {
     }
 
 
+    private void changeDirectory(String path) {
+
+        Path folder = Paths.get(path);
+        File node = folder.toFile();
+        TreeItem<File> root = new TreeItem<>(node);
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
+
+            ComboBoxValue result = getRootDrive(node.getAbsolutePath());
+            if (result != null) {
+                result.isActiveChangeListener = false;
+                comboBoxDrive.getSelectionModel().select(result);
+            }
+
+            for (Path entry : stream) {
+                File file = entry.toFile();
+                Files.getLastModifiedTime(entry);
+
+                ImageView imageView = new ImageView();
+                imageView.setFitWidth(15);
+                imageView.setFitHeight(15);
+                Icon icon = FileSystemView.getFileSystemView().getSystemIcon(file);
+                java.awt.Image image = ((ImageIcon) icon).getImage();
+                BufferedImage bi = (BufferedImage) image;
+                imageView.setImage(SwingFXUtils.toFXImage(bi, null));
+
+                TreeItem<File> child = new TreeItem<>(file, imageView);
+                root.getChildren().add(child);
+            }
+
+            treeTableView.setRoot(root);
+            treeTableView.setShowRoot(false);
+            textField.setText(treeTableView.getRoot().getValue().getAbsolutePath());
+        } catch (IOException ex) {
+            // An I/O problem has occurred
+        }
+    }
+
+
     private void changeDirectory(String path, boolean activeComboBox) {
 
         File fileNode = new File(path);
@@ -157,9 +199,9 @@ public class ProcessController {
     }
 
 
-    private void changeDirectory(String path) {
-       changeDirectory(path, false);
-    }
+//    private void changeDirectory(String path) {
+//       changeDirectory(path, false);
+//    }
 
 
     private ComboBoxValue getRootDrive(String child) {
