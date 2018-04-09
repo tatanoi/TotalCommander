@@ -3,10 +3,12 @@ package main.controllers;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.*;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import javax.swing.*;
@@ -24,10 +26,8 @@ import java.util.HashMap;
 
 public class WorkspaceController {
 
-    private boolean isWindows;
     public WorkspaceController() {
-        isWindows = System.getProperty("os.name").equals("Windows");
-        cacheImageViewMap = new HashMap<>();
+
     }
 
     @FXML
@@ -104,7 +104,7 @@ public class WorkspaceController {
                     path += File.separatorChar;
                 }
                 File file = new File(path);
-                if (file.exists() && file.isDirectory()) {
+                if (file.exists() && file.isDirectory() && Files.isReadable(file.toPath())) {
                     changeDirectory(path);
                 }
                 else {
@@ -142,6 +142,47 @@ public class WorkspaceController {
                 }
             }
         });
+        treeTableView.setRowFactory(param -> {
+            final TreeTableRow<Path> row = new TreeTableRow<>();
+            row.setOnDragDetected(event -> {
+                TreeItem<Path> selected = treeTableView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    Dragboard db = treeTableView.startDragAndDrop(TransferMode.ANY);
+                    db.setDragView(row.snapshot(null, null));
+                    ClipboardContent content = new ClipboardContent();
+                    content.putString(selected.getValue().toString());
+                    db.setContent(content);
+                    event.consume();;
+                }
+            });
+            row.setOnDragOver(event -> {
+                // data is dragged over the target
+                Dragboard db = event.getDragboard();
+                if (event.getDragboard().hasString()){
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
+                event.consume();
+            });
+            row.setOnDragDropped(event -> {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (event.getDragboard().hasString()) {
+
+                    if (!row.isEmpty()) {
+                        // This is were you do your magic.
+                        // Move your row in the tree etc
+                        // Here is two examples of how to access
+                        // the drop destination:
+                        int dropIndex = row.getIndex();
+                        TreeItem<Path> droppedon = row.getTreeItem();
+                        success = true;
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            });
+            return row;
+        });
     }
 
 
@@ -170,27 +211,17 @@ public class WorkspaceController {
         }
     }
 
-    private HashMap<String, ImageView> cacheImageViewMap;
 
     private ImageView getCacheImageView(Path entry) {
 
-        String ext = getFileExtension(entry.toString());
-        if (!cacheImageViewMap.containsKey(ext)) {
-            ImageView imageView = new ImageView();
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(15);
-            Icon icon = FileSystemView.getFileSystemView().getSystemIcon(entry.toFile());
-            java.awt.Image image = ((ImageIcon) icon).getImage();
-            BufferedImage bi = (BufferedImage) image;
-            imageView.setImage(SwingFXUtils.toFXImage(bi, null));
-            if (isWindows && ext.equals("exe")) {
-                cacheImageViewMap.put(ext, imageView);
-            }
-            return imageView;
-        }
-        else {
-            return cacheImageViewMap.get(ext);
-        }
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(15);
+        imageView.setFitHeight(15);
+        Icon icon = FileSystemView.getFileSystemView().getSystemIcon(entry.toFile());
+        java.awt.Image image = ((ImageIcon) icon).getImage();
+        BufferedImage bi = (BufferedImage) image;
+        imageView.setImage(SwingFXUtils.toFXImage(bi, null));
+        return imageView;
     }
 
 
