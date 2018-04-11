@@ -6,6 +6,8 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.util.Callback;
@@ -130,6 +132,30 @@ public class WorkspaceController {
         });
         comboBoxDrive.getSelectionModel().select(2);
 
+        columnName.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
+        columnName.setOnEditCommit(event -> {
+            System.out.println(event.getNewValue());
+            Path current = event.getRowValue().getValue();
+            try {
+                Files.move(current, current.resolveSibling(event.getNewValue()));
+                refresh();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        treeTableView.setOnKeyPressed(event -> {
+            Path selected = treeTableView.getSelectionModel().getSelectedItem().getValue();
+            if (event.getCode() == KeyCode.DELETE) {
+                try {
+                    Files.deleteIfExists(selected);
+                    refresh();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        treeTableView.setEditable(true);
         treeTableView.setOnMouseClicked(event -> {
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {
                 Path selected = treeTableView.getSelectionModel().getSelectedItem().getValue();
@@ -163,18 +189,12 @@ public class WorkspaceController {
                 if (event.getDragboard().hasString()) {
                     Path src = Paths.get(event.getDragboard().getString());
                     Path des = Paths.get(treeTableView.getRoot().getValue().toString(), src.getFileName().toString());
-                    System.out.println(des);
-                    if (Files.exists(src)) {
-                        try {
-                            Files.copy(src, des, StandardCopyOption.REPLACE_EXISTING);
-                            refresh();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        Files.copy(src, des, StandardCopyOption.REPLACE_EXISTING);
+                        refresh();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-
-
                     if (!row.isEmpty()) {
                         // This is were you do your magic.
                         // Move your row in the tree etc
@@ -183,10 +203,8 @@ public class WorkspaceController {
                         int dropIndex = row.getIndex();
                         TreeItem<Path> droppedon = row.getTreeItem();
                         success = true;
-
                     }
                 }
-
                 event.setDropCompleted(success);
                 event.consume();
             });
@@ -293,25 +311,4 @@ public class WorkspaceController {
             this.isActiveChangeListener = isActiveChangeListener;
         }
     }
-
-
-    private static void copyFileUsingStream(File source, File dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(source);
-            os = new FileOutputStream(dest);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-        } finally {
-            assert is != null;
-            is.close();
-            assert os != null;
-            os.close();
-        }
-    }
-
 }
