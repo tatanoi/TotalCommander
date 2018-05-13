@@ -5,28 +5,22 @@
  */
 package commander.cls;
 
-import java.awt.AWTEvent;
 import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
+import java.io.File;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.DropMode;
-import javax.swing.JScrollBar;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  *
@@ -43,6 +37,7 @@ public class TablePanel extends javax.swing.JPanel {
     public TablePanel() {
         initComponents();
         setupTable();
+        setupCombobox();
         changeDirectory(Paths.get("C:/"));
     }
     
@@ -82,12 +77,32 @@ public class TablePanel extends javax.swing.JPanel {
             }
         });
         
-//        TableRowSorter<FileModel> sorter = new TableRowSorter<>((FileModel)jTable1.getModel());
-//        jTable1.setRowSorter(sorter);
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setDragEnabled(true);
         jTable1.setDropMode(DropMode.INSERT_ROWS);
         jTable1.setTransferHandler(new TableRowTransferHandler(jTable1)); 
+    }
+    
+    public void setupCombobox() {
+        
+        jComboBox1.addActionListener(e -> { 
+            JComboBox comboBox = (JComboBox)e.getSource();
+            ComboItem item = (ComboItem)comboBox.getSelectedItem();
+            RootInfo fileInfo = (RootInfo)item.getValue();
+            changeDirectory(fileInfo.path);
+        });
+        jComboBox1.removeAllItems();
+        
+        Iterable<Path> roots = FileSystems.getDefault().getRootDirectories();
+        for(Path root : roots)
+        {
+            jComboBox1.addItem(new ComboItem(root.toString(), new RootInfo(root)));
+        }
+    
+    }
+    
+    public void setupNavigationBar() {
+        
     }
     
     /** Change directory using thread to make loading smoother */
@@ -137,7 +152,6 @@ public class TablePanel extends javax.swing.JPanel {
         jPanel2.setPreferredSize(new java.awt.Dimension(25, 28));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.setMaximumSize(new java.awt.Dimension(75, 25));
         jComboBox1.setMinimumSize(new java.awt.Dimension(75, 25));
         jComboBox1.setName(""); // NOI18N
@@ -240,9 +254,6 @@ public class TablePanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setCellRenderer(null);
-        }
 
         add(jScrollPane1);
     }// </editor-fold>//GEN-END:initComponents
@@ -268,7 +279,7 @@ public class TablePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnBackward;
     private javax.swing.JButton btnForward;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<ComboItem> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
