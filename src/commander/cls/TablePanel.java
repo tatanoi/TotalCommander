@@ -128,10 +128,13 @@ public class TablePanel extends javax.swing.JPanel {
                 JTextField textField = (JTextField)e.getSource();
                 try {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        Path path = Paths.get(textField.getText()).toAbsolutePath();
+                        Path path = Paths.get(textField.getText());
+                        if (Files.exists(path)) {
+                            path = path.toAbsolutePath();
+                        }
                         changeDirectory(path);
                         
-                        String root = path.getRoot().toString();
+                        String root = currentPath.getRoot().toString();
                         jComboBox1.removeActionListener(comboActionListener);
                         for (int i = 0; i < jComboBox1.getItemCount(); i++) {
                             System.out.println(root + " | " + jComboBox1.getItemAt(i).getKey());
@@ -140,6 +143,7 @@ public class TablePanel extends javax.swing.JPanel {
                                 break;
                             }
                         }
+                        
                         jComboBox1.addActionListener(comboActionListener);
                         textField.setText(currentPath.toString());
                     } 
@@ -154,7 +158,8 @@ public class TablePanel extends javax.swing.JPanel {
     /** Change directory using thread to make loading smoother */
     public boolean changeDirectory(Path path) {
         
-        if (this.currentPath != null && (this.currentPath.toString().equals(path.toString()) || !Files.isReadable(path))) {
+        if (this.currentPath != null && (this.currentPath.toString().equals(path.toString()) 
+                || !Files.exists(path) || !Files.isReadable(path))) {
             return false;
         }
         
