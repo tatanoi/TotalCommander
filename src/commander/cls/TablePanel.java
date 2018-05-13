@@ -12,15 +12,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import javax.swing.DropMode;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileSystemView;
 
 /**
  *
@@ -29,7 +27,8 @@ import javax.swing.filechooser.FileSystemView;
 public class TablePanel extends javax.swing.JPanel {
     
     private Path currentPath;
-    private LoadDirectoryThread threadStop;
+    private LoadDirectoryThread threadStop; // change directory thread
+    private int previousIndex; // previous combobox index
     
     /**
      * Creates new form TablePanel1
@@ -85,20 +84,21 @@ public class TablePanel extends javax.swing.JPanel {
     
     public void setupCombobox() {
         
-        jComboBox1.addActionListener(e -> { 
+        jComboBox1.removeAllItems();
+        jComboBox1.addActionListener(e -> {
             JComboBox comboBox = (JComboBox)e.getSource();
             ComboItem item = (ComboItem)comboBox.getSelectedItem();
             RootInfo fileInfo = (RootInfo)item.getValue();
-            changeDirectory(fileInfo.path);
+            if (!changeDirectory(fileInfo.path)) {
+                comboBox.setSelectedIndex(previousIndex);
+            } else {
+                jLabel1.setText("Drive size: " + fileInfo.size);
+                previousIndex = comboBox.getSelectedIndex();
+            }
         });
-        jComboBox1.removeAllItems();
         
         Iterable<Path> roots = FileSystems.getDefault().getRootDirectories();
-        for(Path root : roots)
-        {
-            jComboBox1.addItem(new ComboItem(root.toString(), new RootInfo(root)));
-        }
-    
+        roots.forEach(root -> jComboBox1.addItem(new ComboItem(root.toString(), new RootInfo(root))));
     }
     
     public void setupNavigationBar() {
@@ -106,7 +106,11 @@ public class TablePanel extends javax.swing.JPanel {
     }
     
     /** Change directory using thread to make loading smoother */
-    public void changeDirectory(Path path) {
+    public boolean changeDirectory(Path path) {
+        
+        if (this.currentPath != null && (this.currentPath.toString().equals(path.toString()) || !Files.isReadable(path))) {
+            return false;
+        }
         
         if (threadStop != null) {
             threadStop.stopRequest();
@@ -121,7 +125,7 @@ public class TablePanel extends javax.swing.JPanel {
         
         Thread thread = new Thread(threadStop);
         thread.start();
-//        SwingUtilities.invokeLater(thread);
+        return true;
     }
 
     /**
