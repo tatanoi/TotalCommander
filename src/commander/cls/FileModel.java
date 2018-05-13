@@ -41,6 +41,18 @@ public class FileModel extends AbstractTableModel {
     public int getColumnCount() {
         return 5;
     }
+    
+    @Override
+    public String getColumnName(int column) {
+        switch (column) {
+            case 0: return "Name";
+            case 1: return "Ext";
+            case 2: return "Size";
+            case 3: return "Date";
+            case 4: return "Attr";
+        }
+        return "UNKNOWN";
+    }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {

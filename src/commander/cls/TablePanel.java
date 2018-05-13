@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import javax.swing.DropMode;
 import javax.swing.JScrollBar;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -65,7 +66,9 @@ public class TablePanel extends javax.swing.JPanel {
         jTable1.setTransferHandler(new TableRowTransferHandler(jTable1)); 
         
         jTable1.setModel(new FileModel());
+        
         jTable1.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(200);
         changeDirectory(Paths.get("C:/"));
     }
 
@@ -83,6 +86,7 @@ public class TablePanel extends javax.swing.JPanel {
             } catch (Exception e) { }
             
         } 
+        
         
         this.currentPath = path;
         this.paths.clear();

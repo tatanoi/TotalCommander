@@ -56,10 +56,13 @@ public class FileInfo {
             this.lastModified = FileUtils.getLastModifiedDate(this.path);
             this.attribute = "Later";
             
-            this.icon = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
-            Image image = icon.getImage(); // transform it 
-            Image newimg = image.getScaledInstance(13, 13,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-            this.icon = new ImageIcon(newimg);
+            try {
+                this.icon = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
+                Image image = this.icon.getImage(); // transform it 
+                Image newimg = image.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+                this.icon = new ImageIcon(newimg);
+            } catch (Exception ignored) {}
+            
         }
     }
 }
