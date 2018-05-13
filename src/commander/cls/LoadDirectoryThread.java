@@ -20,35 +20,23 @@ import javax.swing.table.DefaultTableModel;
  */
 public class LoadDirectoryThread implements Runnable {
         
-        public LoadDirectoryThread(JTable table, ArrayList<Path> paths, Path path) {
+        public LoadDirectoryThread(JTable table, Path path) {
             this.table = table;
-            this.paths = paths;
             this.path = path;
-        }
-        
-         public LoadDirectoryThread(JTable table, ArrayList<Path> paths, Path path, JScrollPane scrollPane) {
-            this.table = table;
-            this.paths = paths;
-            this.path = path;
-            this.scrollPane = scrollPane;
         }
         
         private volatile boolean stopRequested;
         private Thread runThread;
         private JTable table;
-        private ArrayList<Path> paths;
         private Path path;
-        private JScrollPane scrollPane;
         
         public void run() {
             runThread = Thread.currentThread();
             stopRequested = false;
             FileModel model = (FileModel)table.getModel();
             model.clear();
-            
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
                 for (Path p : directoryStream) {
-                    paths.add(p);
                     model.addRow(new FileInfo(p));
                     if (stopRequested) {
                         break;
@@ -59,32 +47,6 @@ public class LoadDirectoryThread implements Runnable {
                 ignored.printStackTrace();
             }
         }
-        
-//        public void run() {
-//            runThread = Thread.currentThread();
-//            stopRequested = false;
-//            DefaultTableModel model = (DefaultTableModel)table.getModel();
-//            model.setRowCount(0);
-//            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
-//                for (Path p : directoryStream) {
-//                    paths.add(p);
-//                    FileInfo fileInfo = new FileInfo(p);
-//                    model.addRow(new Object[] {
-//                        fileInfo.name,
-//                        fileInfo.extension,
-//                        fileInfo.size,
-//                        fileInfo.lastModified,
-//                        fileInfo.attribute
-//                    });
-//                    if (stopRequested) {
-//                        break;
-//                    }
-//                }
-//                System.out.println(path.toString() + " : " + model.getRowCount());
-//            } catch (Exception ignored) { 
-//                ignored.printStackTrace();
-//            }
-//        }
         
         public void stopRequest() {
             stopRequested = true;

@@ -10,6 +10,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -36,15 +38,27 @@ public class TablePanel extends javax.swing.JPanel {
      */
     public TablePanel() {
         initComponents();
-        paths = new ArrayList<>();
+        setupTable();
+        changeDirectory(Paths.get("C:/"));
+    }
+
+    private Path currentPath;
+    private LoadDirectoryThread threadStop;
+    
+    public void setupTable() {
+        
+        jTable1.setModel(new FileModel());
+        jTable1.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(200);
+        
         jTable1.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent mouseEvent) {
                 JTable table =(JTable) mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
-                int row = table.getSelectedRow();
+                int row = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
-                    // your valueChanged overridden method
-                    changeDirectory(paths.get(row));
+                    FileModel model = (FileModel)table.getModel();
+                    changeDirectory(model.getRow(row).path);
                 }
             }
         });
@@ -54,10 +68,16 @@ public class TablePanel extends javax.swing.JPanel {
                 JTable table =(JTable) e.getSource();
                 int row = table.getSelectedRow();
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && row != -1) {
-                    // your valueChanged overridden method 
-                    changeDirectory(paths.get(row));
+                    FileModel model = (FileModel)table.getModel();
+                    changeDirectory(model.getRow(row).path);
                 }
              }
+        });
+        
+        jTable1.addFocusListener(new FocusAdapter() {
+            public void focusLost(FocusEvent e) {
+                ((JTable)e.getSource()).clearSelection();
+            }
         });
         
         
@@ -65,17 +85,8 @@ public class TablePanel extends javax.swing.JPanel {
         jTable1.setDropMode(DropMode.INSERT_ROWS);
         jTable1.setTransferHandler(new TableRowTransferHandler(jTable1)); 
         
-        jTable1.setModel(new FileModel());
         
-        jTable1.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(200);
-        changeDirectory(Paths.get("C:/"));
     }
-
-    private Path currentPath;
-    private ArrayList<Path> paths;
-    private LoadDirectoryThread threadStop;
-    
     
     public void changeDirectory(Path path) {
         
@@ -87,10 +98,8 @@ public class TablePanel extends javax.swing.JPanel {
             
         } 
         
-        
         this.currentPath = path;
-        this.paths.clear();
-        this.threadStop = new LoadDirectoryThread(jTable1, paths, path, jScrollPane1);
+        this.threadStop = new LoadDirectoryThread(jTable1, path);
         
         Thread thread = new Thread(threadStop);
         thread.start();
