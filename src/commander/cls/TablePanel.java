@@ -5,7 +5,13 @@
  */
 package commander.cls;
 
+import java.awt.AWTEvent;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.nio.file.DirectoryStream;
@@ -13,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import javax.swing.DropMode;
+import javax.swing.JScrollBar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,19 +36,36 @@ public class TablePanel extends javax.swing.JPanel {
     public TablePanel() {
         initComponents();
         paths = new ArrayList<>();
-        
         jTable1.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent mouseEvent) {
                 JTable table =(JTable) mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
-                int row = table.rowAtPoint(point);
+                int row = table.getSelectedRow();
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
-                    // your valueChanged overridden method 
+                    // your valueChanged overridden method
                     changeDirectory(paths.get(row));
                 }
             }
         });
         
+        jTable1.addKeyListener(new KeyAdapter() {
+             public void keyPressed(KeyEvent e) {
+                JTable table =(JTable) e.getSource();
+                int row = table.getSelectedRow();
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && row != -1) {
+                    // your valueChanged overridden method 
+                    changeDirectory(paths.get(row));
+                }
+             }
+        });
+        
+        
+        jTable1.setDragEnabled(true);
+        jTable1.setDropMode(DropMode.INSERT_ROWS);
+        jTable1.setTransferHandler(new TableRowTransferHandler(jTable1)); 
+        
+        jTable1.setModel(new FileModel());
+        jTable1.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
         changeDirectory(Paths.get("C:/"));
     }
 
@@ -61,7 +86,7 @@ public class TablePanel extends javax.swing.JPanel {
         
         this.currentPath = path;
         this.paths.clear();
-        this.threadStop = new LoadDirectoryThread(jTable1, paths, path);
+        this.threadStop = new LoadDirectoryThread(jTable1, paths, path, jScrollPane1);
         
         Thread thread = new Thread(threadStop);
         thread.start();
@@ -186,31 +211,28 @@ public class TablePanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Name", "Ext", "Size", "Date", "Attr"
+                "Name", "Extension", "Size", "Date", "Attr"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setCellRenderer(null);
+        }
 
         add(jScrollPane1);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackwardActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnBackwardActionPerformed
 
     private void btnForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
@@ -219,6 +241,9 @@ public class TablePanel extends javax.swing.JPanel {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
+        if (currentPath.getNameCount() > 0) {
+            changeDirectory(currentPath.getParent());
+        }
     }//GEN-LAST:event_btnBackActionPerformed
 
 

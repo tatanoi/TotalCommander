@@ -5,10 +5,12 @@
  */
 package commander.cls;
 
+import java.awt.Rectangle;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,28 +26,30 @@ public class LoadDirectoryThread implements Runnable {
             this.path = path;
         }
         
+         public LoadDirectoryThread(JTable table, ArrayList<Path> paths, Path path, JScrollPane scrollPane) {
+            this.table = table;
+            this.paths = paths;
+            this.path = path;
+            this.scrollPane = scrollPane;
+        }
+        
         private volatile boolean stopRequested;
         private Thread runThread;
         private JTable table;
         private ArrayList<Path> paths;
         private Path path;
+        private JScrollPane scrollPane;
         
         public void run() {
             runThread = Thread.currentThread();
             stopRequested = false;
-            DefaultTableModel model = (DefaultTableModel)table.getModel();
-            model.setRowCount(0);
+            FileModel model = (FileModel)table.getModel();
+            model.clear();
+            
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
                 for (Path p : directoryStream) {
                     paths.add(p);
-                    FileInfo fileInfo = new FileInfo(p);
-                    model.addRow(new Object[] {
-                        fileInfo.name,
-                        fileInfo.extension,
-                        fileInfo.size,
-                        fileInfo.lastModified,
-                        fileInfo.attribute
-                    });
+                    model.addRow(new FileInfo(p));
                     if (stopRequested) {
                         break;
                     }
@@ -55,6 +59,32 @@ public class LoadDirectoryThread implements Runnable {
                 ignored.printStackTrace();
             }
         }
+        
+//        public void run() {
+//            runThread = Thread.currentThread();
+//            stopRequested = false;
+//            DefaultTableModel model = (DefaultTableModel)table.getModel();
+//            model.setRowCount(0);
+//            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
+//                for (Path p : directoryStream) {
+//                    paths.add(p);
+//                    FileInfo fileInfo = new FileInfo(p);
+//                    model.addRow(new Object[] {
+//                        fileInfo.name,
+//                        fileInfo.extension,
+//                        fileInfo.size,
+//                        fileInfo.lastModified,
+//                        fileInfo.attribute
+//                    });
+//                    if (stopRequested) {
+//                        break;
+//                    }
+//                }
+//                System.out.println(path.toString() + " : " + model.getRowCount());
+//            } catch (Exception ignored) { 
+//                ignored.printStackTrace();
+//            }
+//        }
         
         public void stopRequest() {
             stopRequested = true;

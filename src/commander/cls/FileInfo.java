@@ -1,9 +1,14 @@
 package commander.cls;
 
+import java.awt.Image;
+import java.nio.file.FileSystem;
 import javafx.scene.image.ImageView;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.filechooser.FileSystemView;
 
 
 public class FileInfo {
@@ -14,7 +19,7 @@ public class FileInfo {
     public String size;
     public String lastModified;
     public String attribute;
-    public ImageView icon;
+    public ImageIcon icon;
 
     public boolean isDirectory;
     public boolean isReadable;
@@ -25,7 +30,7 @@ public class FileInfo {
         this.size = "";
         this.lastModified = "";
         this.attribute = "";
-        this.icon = new ImageView();
+        this.icon = null;
     }
 
     public FileInfo(String stringPath) {
@@ -50,8 +55,11 @@ public class FileInfo {
             this.size = FileUtils.getSize(this.path);
             this.lastModified = FileUtils.getLastModifiedDate(this.path);
             this.attribute = "Later";
-
-//            this.icon = FileUtils.getIcon(this.path);
+            
+            this.icon = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
+            Image image = icon.getImage(); // transform it 
+            Image newimg = image.getScaledInstance(13, 13,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+            this.icon = new ImageIcon(newimg);
         }
     }
 }
