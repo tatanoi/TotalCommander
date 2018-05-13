@@ -6,10 +6,13 @@
 package commander.cls;
 
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.nio.file.FileSystems;
@@ -19,6 +22,7 @@ import java.nio.file.Paths;
 import javax.swing.DropMode;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
@@ -28,8 +32,10 @@ public class TablePanel extends javax.swing.JPanel {
     
     private Path currentPath;
     private LoadDirectoryThread threadStop; // change directory thread
-    private int previousIndex; // previous combobox index
     
+    /** For jCombobox1 */
+    private int previousIndex; // previous combobox index
+    private ActionListener comboActionListener;
     /**
      * Creates new form TablePanel1
      */
@@ -37,6 +43,7 @@ public class TablePanel extends javax.swing.JPanel {
         initComponents();
         setupTable();
         setupCombobox();
+        setupNavigationBar();
         changeDirectory(Paths.get("C:/"));
     }
     
@@ -55,7 +62,13 @@ public class TablePanel extends javax.swing.JPanel {
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
                     FileModel model = (FileModel)table.getModel();
                     row = table.convertRowIndexToModel(row);
-                    changeDirectory(model.getRow(row).path);
+                    Path path = model.getRow(row).path;
+                    if (Files.isDirectory(path)) {
+                        changeDirectory(path);
+                    }
+                    else {
+                        // OPEN FILE
+                    }
                 }
             }
         });
@@ -66,7 +79,13 @@ public class TablePanel extends javax.swing.JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && row != -1) {
                     FileModel model = (FileModel)table.getModel();
                     row = table.convertRowIndexToModel(row);
-                    changeDirectory(model.getRow(row).path);
+                    Path path = model.getRow(row).path;
+                    if (Files.isDirectory(path)) {
+                        changeDirectory(path);
+                    }
+                    else {
+                        // OPEN FILE
+                    }
                 }
              }
         });
@@ -84,8 +103,7 @@ public class TablePanel extends javax.swing.JPanel {
     
     public void setupCombobox() {
         
-        jComboBox1.removeAllItems();
-        jComboBox1.addActionListener(e -> {
+        comboActionListener = (ActionEvent e) -> {
             JComboBox comboBox = (JComboBox)e.getSource();
             ComboItem item = (ComboItem)comboBox.getSelectedItem();
             RootInfo fileInfo = (RootInfo)item.getValue();
@@ -95,14 +113,42 @@ public class TablePanel extends javax.swing.JPanel {
                 jLabel1.setText("Drive size: " + fileInfo.size);
                 previousIndex = comboBox.getSelectedIndex();
             }
-        });
+        };
+        
+        jComboBox1.removeAllItems();
+        jComboBox1.addActionListener(comboActionListener);
         
         Iterable<Path> roots = FileSystems.getDefault().getRootDirectories();
         roots.forEach(root -> jComboBox1.addItem(new ComboItem(root.toString(), new RootInfo(root))));
     }
     
     public void setupNavigationBar() {
-        
+        jTextField1.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                JTextField textField = (JTextField)e.getSource();
+                try {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        Path path = Paths.get(textField.getText()).toAbsolutePath();
+                        changeDirectory(path);
+                        
+                        String root = path.getRoot().toString();
+                        jComboBox1.removeActionListener(comboActionListener);
+                        for (int i = 0; i < jComboBox1.getItemCount(); i++) {
+                            System.out.println(root + " | " + jComboBox1.getItemAt(i).getKey());
+                            if (jComboBox1.getItemAt(i).getKey().equals(root)) {
+                                jComboBox1.setSelectedIndex(i);
+                                break;
+                            }
+                        }
+                        jComboBox1.addActionListener(comboActionListener);
+                        textField.setText(currentPath.toString());
+                    } 
+                }
+                catch (Exception ex) {
+                    textField.setText(currentPath.toString());
+                }
+            }
+        });
     }
     
     /** Change directory using thread to make loading smoother */
@@ -121,6 +167,7 @@ public class TablePanel extends javax.swing.JPanel {
         } 
         
         this.currentPath = path;
+        this.jTextField1.setText(currentPath.toString());
         this.threadStop = new LoadDirectoryThread(jTable1, path);
         
         Thread thread = new Thread(threadStop);
