@@ -59,7 +59,7 @@ public class FileInfo {
             try {
                 this.icon = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
                 Image image = this.icon.getImage(); // transform it 
-                Image newimg = image.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+                Image newimg = image.getScaledInstance(14, 14,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
                 this.icon = new ImageIcon(newimg);
             } catch (Exception ignored) {}
             

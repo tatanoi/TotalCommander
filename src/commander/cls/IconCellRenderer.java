@@ -31,7 +31,7 @@ public class IconCellRenderer extends DefaultTableCellRenderer {
         
         if (value != null) {
             FileModel model = (FileModel)table.getModel();
-            this.setIcon(model.getRow(row).icon);
+            this.setIcon(model.getRow(table.convertRowIndexToModel(row)).icon);
             this.setText((String)value);
         }
         return this;

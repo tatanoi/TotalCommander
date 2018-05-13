@@ -5,14 +5,10 @@
  */
 package commander.cls;
 
-import java.awt.Rectangle;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -35,6 +31,8 @@ public class LoadDirectoryThread implements Runnable {
             stopRequested = false;
             FileModel model = (FileModel)table.getModel();
             model.clear();
+            table.setAutoCreateRowSorter(false);
+            table.setRowSorter(null);
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
                 for (Path p : directoryStream) {
                     model.addRow(new FileInfo(p));
@@ -42,6 +40,7 @@ public class LoadDirectoryThread implements Runnable {
                         break;
                     }
                 }
+                table.setAutoCreateRowSorter(true);
                 System.out.println(path.toString() + " : " + model.getRowCount());
             } catch (Exception ignored) { 
                 ignored.printStackTrace();

@@ -26,13 +26,17 @@ import javax.swing.JScrollBar;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author Nam
  */
 public class TablePanel extends javax.swing.JPanel {
-
+    
+    private Path currentPath;
+    private LoadDirectoryThread threadStop;
+    
     /**
      * Creates new form TablePanel1
      */
@@ -41,10 +45,8 @@ public class TablePanel extends javax.swing.JPanel {
         setupTable();
         changeDirectory(Paths.get("C:/"));
     }
-
-    private Path currentPath;
-    private LoadDirectoryThread threadStop;
     
+    /** Setup table */
     public void setupTable() {
         
         jTable1.setModel(new FileModel());
@@ -58,36 +60,37 @@ public class TablePanel extends javax.swing.JPanel {
                 int row = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
                     FileModel model = (FileModel)table.getModel();
+                    row = table.convertRowIndexToModel(row);
                     changeDirectory(model.getRow(row).path);
                 }
             }
         });
-        
         jTable1.addKeyListener(new KeyAdapter() {
              public void keyPressed(KeyEvent e) {
                 JTable table =(JTable) e.getSource();
                 int row = table.getSelectedRow();
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && row != -1) {
                     FileModel model = (FileModel)table.getModel();
+                    row = table.convertRowIndexToModel(row);
                     changeDirectory(model.getRow(row).path);
                 }
              }
         });
-        
         jTable1.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent e) {
                 ((JTable)e.getSource()).clearSelection();
             }
         });
         
-        
+//        TableRowSorter<FileModel> sorter = new TableRowSorter<>((FileModel)jTable1.getModel());
+//        jTable1.setRowSorter(sorter);
+        jTable1.setAutoCreateRowSorter(true);
         jTable1.setDragEnabled(true);
         jTable1.setDropMode(DropMode.INSERT_ROWS);
         jTable1.setTransferHandler(new TableRowTransferHandler(jTable1)); 
-        
-        
     }
     
+    /** Change directory using thread to make loading smoother */
     public void changeDirectory(Path path) {
         
         if (threadStop != null) {
@@ -103,6 +106,7 @@ public class TablePanel extends javax.swing.JPanel {
         
         Thread thread = new Thread(threadStop);
         thread.start();
+//        SwingUtilities.invokeLater(thread);
     }
 
     /**
