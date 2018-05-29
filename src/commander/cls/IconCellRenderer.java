@@ -7,9 +7,7 @@ package commander.cls;
 
 import java.awt.Component;
 import javax.swing.JTable;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
-import sun.swing.DefaultLookup;
 
 /**
  *

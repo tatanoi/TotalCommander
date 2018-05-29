@@ -5,13 +5,11 @@
  */
 package commander.cls;
 
+import commander.cls.datatransfer.FileInfoTransferable;
 import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DragSource;
-import java.io.IOException;
-import javax.activation.ActivationDataFlavor;
 import javax.activation.DataHandler;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -27,7 +25,7 @@ public class TableRowTransferHandler extends TransferHandler {
         public void reorder(int fromIndex, int toIndex);
     }
     
-   private final DataFlavor localObjectFlavor = new ActivationDataFlavor(Integer.class, "application/x-java-Integer;class=java.lang.Integer", "Integer Row Index");
+   private final DataFlavor localObjectFlavor = new DataFlavor(FileInfo.class, "A FileInfo Object");
    private JTable           table             = null;
 
    public TableRowTransferHandler(JTable table) {
@@ -37,43 +35,65 @@ public class TableRowTransferHandler extends TransferHandler {
    @Override
    protected Transferable createTransferable(JComponent c) {
       assert (c == table);
-      return new DataHandler(table.getSelectedRow(), localObjectFlavor.getMimeType());
+      return new DataHandler(table.getSelectedRow(), FileInfoTransferable.fileInfoFlavor.getMimeType());
    }
 
    @Override
    public boolean canImport(TransferHandler.TransferSupport info) {
-      boolean b = info.getComponent() == table && info.isDrop() && info.isDataFlavorSupported(localObjectFlavor);
-      table.setCursor(b ? DragSource.DefaultMoveDrop : DragSource.DefaultMoveNoDrop);
-      return b;
+        boolean b = info.getComponent() == table && info.isDrop();
+        table.setCursor(b ? DragSource.DefaultMoveDrop : DragSource.DefaultMoveNoDrop);
+        return b;
    }
 
    @Override
    public int getSourceActions(JComponent c) {
       return TransferHandler.COPY_OR_MOVE;
    }
+   
 
    @Override
    public boolean importData(TransferHandler.TransferSupport info) {
-      JTable target = (JTable) info.getComponent();
-      JTable.DropLocation dl = (JTable.DropLocation) info.getDropLocation();
-      int index = dl.getRow();
-      int max = table.getModel().getRowCount();
-      if (index < 0 || index > max)
-         index = max;
-      target.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-      try {
-         Integer rowFrom = (Integer) info.getTransferable().getTransferData(localObjectFlavor);
-         if (rowFrom != -1 && rowFrom != index) {
-            ((Reorderable)table.getModel()).reorder(rowFrom, index);
-            if (index > rowFrom)
-               index--;
-            target.getSelectionModel().addSelectionInterval(index, index);
-            return true;
-         }
-      } catch (UnsupportedFlavorException | IOException e) {
-         e.printStackTrace();
-      }
-      return false;
+//      JTable target = (JTable) info.getComponent();
+//      JTable.DropLocation dl = (JTable.DropLocation) info.getDropLocation();
+//      int index = dl.getRow();
+//      int max = table.getModel().getRowCount();
+//      if (index < 0 || index > max)
+//         index = max;
+//      target.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//      try {
+//         Integer rowFrom = (Integer) info.getTransferable().getTransferData(localObjectFlavor);
+//         if (rowFrom != -1 && rowFrom != index) {
+//            ((Reorderable)table.getModel()).reorder(rowFrom, index);
+//            if (index > rowFrom)
+//               index--;
+//            target.getSelectionModel().addSelectionInterval(index, index);
+//            return true;
+//         }
+//      } catch (Exception e) {
+//         e.printStackTrace();
+//      }
+//      return false;
+        
+        try {
+            FileInfo row = (FileInfo) info.getTransferable().getTransferData(FileInfoTransferable.fileInfoFlavor);
+            
+            FileModel model = (FileModel)this.table.getModel();
+            JTable target = (JTable) info.getComponent();
+            FileModel targetModel = (FileModel)target.getModel();
+            
+            System.out.println("THIS = " + model.getRowCount());
+            System.out.println("TARG = " + target.getRowCount());
+            if (row != null) {
+                model.addRow(row);
+                return true;
+                
+            }
+            return false;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
    }
 
    @Override

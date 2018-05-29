@@ -5,6 +5,7 @@
  */
 package commander;
 
+import commander.cls.controller.AppController;
 import commander.cls.FileInfo;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -28,7 +29,7 @@ public class MainJFrame extends javax.swing.JFrame {
      */
     public MainJFrame() {
         initComponents();
-        
+        AppController.getInstance().setParent(this);
     }
  
     /**
@@ -81,6 +82,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jButton1.setMinimumSize(new java.awt.Dimension(30, 30));
         jButton1.setPreferredSize(new java.awt.Dimension(30, 30));
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
@@ -191,6 +197,11 @@ public class MainJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        AppController.getInstance().showTransferDialog();
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments

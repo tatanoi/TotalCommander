@@ -5,6 +5,7 @@
  */
 package commander.cls;
 
+import java.awt.Desktop;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +13,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.nio.file.FileSystems;
@@ -68,6 +68,12 @@ public class TablePanel extends javax.swing.JPanel {
                     }
                     else {
                         // OPEN FILE
+                        try {
+                            Desktop.getDesktop().open(path.toFile());
+                        }
+                        catch (Exception ex) {
+                            
+                        }
                     }
                 }
             }
@@ -85,6 +91,12 @@ public class TablePanel extends javax.swing.JPanel {
                     }
                     else {
                         // OPEN FILE
+                        try {
+                            Desktop.getDesktop().open(path.toFile());
+                        }
+                        catch (Exception ex) {
+                            
+                        }
                     }
                 }
              }
@@ -159,7 +171,7 @@ public class TablePanel extends javax.swing.JPanel {
     public boolean changeDirectory(Path path) {
         
         if (this.currentPath != null && (this.currentPath.toString().equals(path.toString()) 
-                || !Files.exists(path) || !Files.isReadable(path))) {
+                || !Files.exists(path) || !Files.isDirectory(path) || !Files.isReadable(path))) {
             return false;
         }
         
