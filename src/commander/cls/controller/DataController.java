@@ -5,7 +5,7 @@
  */
 package commander.cls.controller;
 
-import commander.cls.FileInfo;
+import commander.cls.file.FileInfo;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +16,7 @@ public class DataController {
     
     private static DataController instance;
     
-    public DataController getInstance() {
+    public static DataController getInstance() {
         if (instance == null) {
             instance = new DataController();
         }

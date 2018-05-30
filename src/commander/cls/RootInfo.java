@@ -5,10 +5,13 @@
  */
 package commander.cls;
 
+import commander.cls.file.FileInfo;
 import java.awt.Image;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileSystemView;
 
@@ -19,41 +22,23 @@ import javax.swing.filechooser.FileSystemView;
 public class RootInfo extends FileInfo {
 
     protected FileSystemView fsv;
-    protected File file;
     
-    public RootInfo() {
-        super();
-    }
-
-    public RootInfo(String stringPath) {
-        super(stringPath);
-    }
-
     public RootInfo(Path path) {
         super(path);
     }
-
     
     @Override
-    public void initialize(Path path) {
-        this.path = path;
-        this.fsv = FileSystemView.getFileSystemView();
-        this.file = path.toFile();
+    public void init(Path p) {
+        path = p.toAbsolutePath();
+        file = path.toFile();
+        fsv = FileSystemView.getFileSystemView();
         
-        if (!Files.notExists(path)) {
-            this.name = fsv.getSystemDisplayName(file);
-            this.isDirectory = true;
-            this.isReadable = Files.isReadable(path);
-            this.extension = fsv.getSystemTypeDescription(file);
-            this.size = String.format("%d", file.getTotalSpace());
-            
-            try {
-                this.icon = (ImageIcon)fsv.getSystemIcon(file);
-                Image image = this.icon.getImage(); // transform it 
-                Image newimg = image.getScaledInstance(14, 14,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-                this.icon = new ImageIcon(newimg);
-            } catch (Exception ignored) {}
-            
+        if (!Files.notExists(p)) {
+            name = fsv.getSystemDisplayName(file);
+            isDirectory = true;
+            isReadable = Files.isReadable(path);
+            extension = fsv.getSystemTypeDescription(file);
+            size = file.getTotalSpace();
         }
     }
 }

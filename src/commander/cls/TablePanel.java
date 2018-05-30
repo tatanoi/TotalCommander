@@ -5,7 +5,13 @@
  */
 package commander.cls;
 
+import commander.cls.controller.DataController;
+import commander.cls.datatransfer.TableRowTransferHandler;
+import commander.cls.file.FileInfo;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,10 +25,19 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import javafx.scene.input.MouseButton;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.DropMode;
+import javax.swing.InputMap;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -52,28 +67,49 @@ public class TablePanel extends javax.swing.JPanel {
         
         jTable1.setModel(new FileModel());
         jTable1.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
+        jTable1.getColumnModel().getColumn(1).setCellRenderer(new CustomCellRenderer());
+        jTable1.getColumnModel().getColumn(2).setCellRenderer(new CustomCellRenderer());
+        jTable1.getColumnModel().getColumn(3).setCellRenderer(new CustomCellRenderer());
+        jTable1.getColumnModel().getColumn(4).setCellRenderer(new CustomCellRenderer());
+        
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(200);
         
         jTable1.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent mouseEvent) {
+            public void mouseReleased(MouseEvent mouseEvent) {
                 JTable table =(JTable) mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
                 int row = table.rowAtPoint(point);
-                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                if (mouseEvent.getButton() == MouseEvent.BUTTON1 &&
+                        mouseEvent.getClickCount() == 2 && 
+                        table.getSelectedRow() != -1) {
                     FileModel model = (FileModel)table.getModel();
                     row = table.convertRowIndexToModel(row);
-                    Path path = model.getRow(row).path;
-                    if (Files.isDirectory(path)) {
-                        changeDirectory(path);
+                    FileInfo f = model.getRow(row);
+                    if (f.isDirectory) {
+                        changeDirectory(f.path);
                     }
                     else {
                         // OPEN FILE
                         try {
-                            Desktop.getDesktop().open(path.toFile());
+                            Desktop.getDesktop().open(f.file);
                         }
                         catch (Exception ex) {
-                            
+                            ex.printStackTrace();
                         }
+                    }
+                }
+                else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
+                    ArrayList<FileInfo> listItem = DataController.getInstance().getListItem();
+                    FileModel model = (FileModel)table.getModel();
+                    FileInfo data = model.getRow(table.convertRowIndexToModel(row));
+                    if (listItem.contains(data)) {
+                        listItem.remove(data);
+                        model.fireTableDataChanged();
+                        System.out.println("OUT");
+                    } else {
+                        listItem.add(data);
+                        model.fireTableDataChanged();
+                        System.out.println("IN");
                     }
                 }
             }
@@ -85,14 +121,14 @@ public class TablePanel extends javax.swing.JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && row != -1) {
                     FileModel model = (FileModel)table.getModel();
                     row = table.convertRowIndexToModel(row);
-                    Path path = model.getRow(row).path;
-                    if (Files.isDirectory(path)) {
-                        changeDirectory(path);
+                    FileInfo f = model.getRow(row);
+                    if (f.isDirectory) {
+                        changeDirectory(f.path);
                     }
                     else {
                         // OPEN FILE
                         try {
-                            Desktop.getDesktop().open(path.toFile());
+                            Desktop.getDesktop().open(f.file);
                         }
                         catch (Exception ex) {
                             
@@ -104,6 +140,26 @@ public class TablePanel extends javax.swing.JPanel {
         jTable1.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent e) {
                 ((JTable)e.getSource()).clearSelection();
+            }
+        });
+        
+        // Change how enter work - disable auto moving down one row when press "Enter"
+        InputMap inputMap = jTable1.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "Back");
+        
+        ActionMap actionMap = jTable1.getActionMap();
+        actionMap.put("Enter", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+            }
+        });
+        actionMap.put("Back", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (currentPath.getNameCount() > 0) {
+                    changeDirectory(currentPath.getParent());
+                }
             }
         });
         

@@ -5,6 +5,7 @@
  */
 package commander.cls;
 
+import commander.cls.file.FileInfo;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;

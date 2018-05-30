@@ -5,6 +5,7 @@
  */
 package commander.cls;
 
+import commander.cls.file.FileInfo;
 import java.awt.List;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
@@ -61,11 +62,23 @@ public class FileModel extends AbstractTableModel {
         switch (columnIndex) {
             case 0: value = fileInfo.name; break;
             case 1: value = fileInfo.extension; break;
-            case 2: value = fileInfo.size; break;
+            case 2: value = fileInfo.size > 0 ? fileInfo.size : null; break;
             case 3: value = fileInfo.lastModified; break;
             case 4: value = fileInfo.attribute; break;
         }
         return value;
+    }
+    
+    @Override
+    public Class<?> getColumnClass(int column) {
+        switch (column) {
+            case 0: return String.class;
+            case 1: return String.class;
+            case 2: return long.class;
+            case 3: return String.class;
+            case 4: return String.class;
+        }
+        return Object.class;
     }
     
     

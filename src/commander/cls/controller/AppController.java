@@ -6,10 +6,8 @@
 package commander.cls.controller;
 
 import commander.MainJFrame;
-import commander.cls.FileInfo;
-import java.awt.Point;
+import commander.cls.file.FileInfo;
 import java.util.ArrayList;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 /**
@@ -50,7 +48,7 @@ public class AppController {
     
     // Show all item we're going to transfer
     public void showTransferDialog() {
-        transferPanel.showDialog(listItem, "AAA", 0);
+        transferPanel.showDialog(DataController.getInstance().getListItem(), "AAA", 0);
     }
     
     // Add item that we're going to transfer

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package commander.cls.file;
 
 import java.io.File;
@@ -13,19 +8,16 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileSystemView;
 
-/**
- *
- * @author Nam
- */
-public class FileData {
-    
+
+public class FileInfo {
+
     public File file;
     public Path path;
     
     // Atrribute show in table
     public String name;
     public String extension;
-    public String size; // As kB
+    public long size;
     public String lastModified;
     public String attribute;
     public ImageIcon icon;
@@ -34,26 +26,29 @@ public class FileData {
     public boolean isExist;
     public boolean isHidden;
     public boolean isFile;
+    public boolean isDirectory;
     public boolean isReadable;
     public boolean isWriteable;
     
-    public FileData(File f) {
-        init(f);
-    }
     
-    public void init(File f) {
-        file = f.getAbsoluteFile();
-        path = f.toPath();
+    public FileInfo(Path p) {
+        init(p);
+    }
+
+    public void init(Path p) {
+        path = p.toAbsolutePath();
+        file = path.toFile();
         
         if (isExist = file.exists()) {
             isHidden = file.isHidden();
             isFile = file.isFile();
+            isDirectory = file.isDirectory();
             isReadable = Files.isReadable(path);
             isWriteable = Files.isWritable(path);
             
             name = file.getName();
-            extension = parseExtension(name);
-            size = String.valueOf(file.length());
+            extension = isDirectory ? "[DIR]" : parseExtension(name);
+            size = isDirectory ? 0 : file.length();
             lastModified = new SimpleDateFormat("dd/MM/yyyy").format(new Date(file.lastModified()));
             attribute = parseAttribute(isReadable, isWriteable, isHidden);
             icon = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
@@ -66,14 +61,14 @@ public class FileData {
         if (i > 0) {
             extension = fileName.substring(i + 1);
         }
-        return extension;
+        return extension.toUpperCase();
     }
     
     private static String parseAttribute(boolean r, boolean w, boolean h) {
         String attr = "";
-        attr += r ? "r" : "-";
-        attr += w ? "w" : "-";
-        attr += h ? "h" : "-";
+        attr += r ? "R" : "-";
+        attr += w ? "W" : "-";
+        attr += h ? "H" : "-";
         return attr;
     }
 }

@@ -9,7 +9,6 @@ import commander.cls.controller.DataController;
 import commander.cls.file.FileInfo;
 import java.awt.Color;
 import java.awt.Component;
-import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -17,11 +16,10 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author Nam
  */
-public class IconCellRenderer extends DefaultTableCellRenderer {
+public class CustomCellRenderer extends DefaultTableCellRenderer {
     
     public Component getTableCellRendererComponent(JTable table, Object value,
                           boolean isSelected, boolean hasFocus, int row, int column) {
-        
         
         if (isSelected) {
             this.setBackground(table.getSelectionBackground());
@@ -41,12 +39,7 @@ public class IconCellRenderer extends DefaultTableCellRenderer {
             setBackground(Color.red);
             setForeground(Color.white);
         }
-        
-        if (value != null) {
-            this.setIcon(f.icon);
-            this.setText(String.valueOf(value));
-        }
-        
+        this.setText(value != null ? String.valueOf(value) : "");
         return this;
     }
 }

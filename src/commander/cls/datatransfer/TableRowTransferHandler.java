@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package commander.cls;
+package commander.cls.datatransfer;
 
+import commander.cls.FileModel;
+import commander.cls.file.FileInfo;
 import commander.cls.datatransfer.FileInfoTransferable;
 import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;

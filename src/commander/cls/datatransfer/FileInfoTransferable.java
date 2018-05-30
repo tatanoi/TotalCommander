@@ -5,8 +5,8 @@
  */
 package commander.cls.datatransfer;
 
-import commander.cls.FileInfo;
-import commander.cls.FileInfo;
+import commander.cls.file.FileInfo;
+import commander.cls.file.FileInfo;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;

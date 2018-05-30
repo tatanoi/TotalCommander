@@ -5,7 +5,7 @@
  */
 package commander.cls.controller;
 
-import commander.cls.FileInfo;
+import commander.cls.file.FileInfo;
 import java.util.ArrayList;
 
 /**

@@ -1,4 +1,4 @@
-package commander.cls;
+package commander.cls.file;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;

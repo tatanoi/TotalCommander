@@ -6,17 +6,6 @@
 package commander;
 
 import commander.cls.controller.AppController;
-import commander.cls.FileInfo;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -30,6 +19,7 @@ public class MainJFrame extends javax.swing.JFrame {
     public MainJFrame() {
         initComponents();
         AppController.getInstance().setParent(this);
+        this.setLocationRelativeTo(null);
     }
  
     /**
