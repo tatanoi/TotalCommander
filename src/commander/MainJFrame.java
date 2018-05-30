@@ -32,6 +32,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
+        jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -40,6 +41,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         tablePanel1 = new commander.cls.TablePanel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        btnCopy = new javax.swing.JButton();
+        btnRename = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
         tablePanel3 = new commander.cls.TablePanel();
         jPanel3 = new javax.swing.JPanel();
         jButton6 = new javax.swing.JButton();
@@ -58,14 +64,17 @@ public class MainJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
         jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
         jToolBar1.setFocusTraversalPolicyProvider(true);
         jToolBar1.setMargin(new java.awt.Insets(0, 2, 0, 0));
         jToolBar1.setMaximumSize(new java.awt.Dimension(65584, 35));
         jToolBar1.setMinimumSize(new java.awt.Dimension(63, 35));
         jToolBar1.setPreferredSize(new java.awt.Dimension(63, 35));
 
-        jButton1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 1, 1);
+        flowLayout1.setAlignOnBaseline(true);
+        jPanel4.setLayout(flowLayout1);
+
+        jButton1.setBorderPainted(false);
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setMaximumSize(new java.awt.Dimension(30, 30));
@@ -77,43 +86,45 @@ public class MainJFrame extends javax.swing.JFrame {
                 jButton1MouseClicked(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jPanel4.add(jButton1);
 
-        jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        jButton2.setBorderPainted(false);
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setMaximumSize(new java.awt.Dimension(30, 30));
         jButton2.setMinimumSize(new java.awt.Dimension(30, 30));
         jButton2.setPreferredSize(new java.awt.Dimension(30, 30));
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        jPanel4.add(jButton2);
 
-        jButton3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        jButton3.setBorderPainted(false);
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setMaximumSize(new java.awt.Dimension(30, 30));
         jButton3.setMinimumSize(new java.awt.Dimension(30, 30));
         jButton3.setPreferredSize(new java.awt.Dimension(30, 30));
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton3);
+        jPanel4.add(jButton3);
 
-        jButton4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        jButton4.setBorderPainted(false);
         jButton4.setFocusable(false);
         jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton4.setMaximumSize(new java.awt.Dimension(30, 30));
         jButton4.setMinimumSize(new java.awt.Dimension(30, 30));
         jButton4.setPreferredSize(new java.awt.Dimension(30, 30));
         jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
+        jPanel4.add(jButton4);
 
-        jButton5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        jButton5.setBorderPainted(false);
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton5.setMaximumSize(new java.awt.Dimension(30, 30));
         jButton5.setMinimumSize(new java.awt.Dimension(30, 30));
         jButton5.setPreferredSize(new java.awt.Dimension(30, 30));
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton5);
+        jPanel4.add(jButton5);
+
+        jToolBar1.add(jPanel4);
 
         getContentPane().add(jToolBar1);
 
@@ -123,18 +134,70 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel2.setMaximumSize(new java.awt.Dimension(50, 32767));
         jPanel2.setMinimumSize(new java.awt.Dimension(50, 0));
-        jPanel2.setPreferredSize(new java.awt.Dimension(50, 50));
+        jPanel2.setPreferredSize(new java.awt.Dimension(50, 200));
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.PAGE_AXIS));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 85, Short.MAX_VALUE)
         );
+
+        jPanel2.add(jPanel5);
+
+        java.awt.FlowLayout flowLayout2 = new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 1, 1);
+        flowLayout2.setAlignOnBaseline(true);
+        jPanel7.setLayout(flowLayout2);
+
+        btnCopy.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCopy.setBorderPainted(false);
+        btnCopy.setFocusable(false);
+        btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCopy.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnCopy.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnCopy.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCopy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCopyMouseClicked(evt);
+            }
+        });
+        jPanel7.add(btnCopy);
+
+        btnRename.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnRename.setBorderPainted(false);
+        btnRename.setFocusable(false);
+        btnRename.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRename.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnRename.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnRename.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnRename.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRename.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRenameMouseClicked(evt);
+            }
+        });
+        jPanel7.add(btnRename);
+
+        jPanel2.add(jPanel7);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 85, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel6);
 
         jPanel1.add(jPanel2);
         jPanel1.add(tablePanel3);
@@ -193,6 +256,14 @@ public class MainJFrame extends javax.swing.JFrame {
         AppController.getInstance().showTransferDialog();
     }//GEN-LAST:event_jButton1MouseClicked
 
+    private void btnCopyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCopyMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCopyMouseClicked
+
+    private void btnRenameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRenameMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRenameMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -229,6 +300,8 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCopy;
+    private javax.swing.JButton btnRename;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
@@ -246,6 +319,10 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JToolBar jToolBar1;
     private commander.cls.TablePanel tablePanel1;
     private commander.cls.TablePanel tablePanel3;

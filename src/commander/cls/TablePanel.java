@@ -102,14 +102,16 @@ public class TablePanel extends javax.swing.JPanel {
                     ArrayList<FileInfo> listItem = DataController.getInstance().getListItem();
                     FileModel model = (FileModel)table.getModel();
                     FileInfo data = model.getRow(table.convertRowIndexToModel(row));
-                    if (listItem.contains(data)) {
-                        listItem.remove(data);
-                        model.fireTableDataChanged();
-                        System.out.println("OUT");
-                    } else {
-                        listItem.add(data);
-                        model.fireTableDataChanged();
-                        System.out.println("IN");
+                    if (data.isReadable) {
+                        if (listItem.contains(data)) {
+                            listItem.remove(data);
+                            model.fireTableDataChanged();
+                            System.out.println("OUT");
+                        } else {
+                            listItem.add(data);
+                            model.fireTableDataChanged();
+                            System.out.println("IN");
+                        }
                     }
                 }
             }

@@ -21,25 +21,26 @@ public class CustomCellRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value,
                           boolean isSelected, boolean hasFocus, int row, int column) {
         
+        FileModel model = (FileModel)table.getModel();
+        FileInfo f = model.getRow(table.convertRowIndexToModel(row));
+        
+        this.setBackground(table.getBackground());
+        this.setForeground(table.getForeground());
+        this.setText(value != null ? String.valueOf(value) : "");
+        
         if (isSelected) {
             this.setBackground(table.getSelectionBackground());
             this.setForeground(table.getSelectionForeground());
-        }
+        } 
         else {
-            this.setBackground(table.getBackground());
-            this.setForeground(table.getForeground());
+            if (!f.isReadable) {
+                setForeground(Color.red);
+            }
+            else if (DataController.getInstance().getListItem().contains(f)) {
+                setBackground(Color.red);
+                setForeground(Color.white);
+            }
         }
-        
-        FileModel model = (FileModel)table.getModel();
-        FileInfo f = model.getRow(table.convertRowIndexToModel(row));
-        if (!f.isReadable && !isSelected) {
-            setForeground(Color.red);
-        }
-        if (f.isReadable && DataController.getInstance().getListItem().contains(f)) {
-            setBackground(Color.red);
-            setForeground(Color.white);
-        }
-        this.setText(value != null ? String.valueOf(value) : "");
         return this;
     }
 }
