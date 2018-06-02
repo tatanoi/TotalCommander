@@ -7,12 +7,8 @@ package commander.cls;
 
 import commander.cls.controller.DataController;
 import commander.cls.datatransfer.RowTransferHandler;
-import commander.cls.datatransfer.TableRowTransferHandler;
 import commander.cls.file.FileInfo;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,11 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
-import javafx.scene.input.MouseButton;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
-import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
@@ -39,9 +32,6 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.TransferHandler;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 /**
  *
