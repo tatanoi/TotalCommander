@@ -15,6 +15,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import javax.activation.DataHandler;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -28,7 +29,7 @@ public class RowTransferHandler extends TransferHandler {
     
     private TablePanel panel = null;
     
-    private DataFlavor flavor = new DataFlavor(int[].class, "String Array");
+    private DataFlavor flavor = new DataFlavor(ArrayList.class, "ArrayList");
 
     public RowTransferHandler(TablePanel panel) {
        this.panel = panel;
@@ -39,13 +40,15 @@ public class RowTransferHandler extends TransferHandler {
         assert (c == panel.getTable());
         
         int[] selectedRows = panel.getTable().getSelectedRows();
-        String[] transferData = new String[selectedRows.length];
+        ArrayList<Integer> listInteger = new ArrayList<>();
         FileModel model = (FileModel)panel.getTable().getModel();
         for (int i = 0; i < selectedRows.length; i++) {
-            transferData[i] = model.getRow(i).toString();
+            if (model.getRow(selectedRows[i]).isReadable) {
+                listInteger.add(selectedRows[i]);
+            }
         }
         
-        return new DataHandler(selectedRows, flavor.getMimeType());
+        return new DataHandler(listInteger, flavor.getMimeType());
     }
 
     @Override
@@ -63,8 +66,7 @@ public class RowTransferHandler extends TransferHandler {
     @Override
     public boolean importData(TransferHandler.TransferSupport info) {
         try {
-            int[] rows = (int[]) info.getTransferable().getTransferData(flavor);
-            System.out.println(rows[0]);
+            ArrayList<Integer> rows = (ArrayList<Integer>) info.getTransferable().getTransferData(flavor);
             AppController.getInstance()
                     .getTransferPanel()
                     .showDialog(DataController.getInstance().srcPanel, panel, rows, 0);

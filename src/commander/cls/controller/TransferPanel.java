@@ -8,6 +8,7 @@ package commander.cls.controller;
 import commander.cls.FileModel;
 import commander.cls.TablePanel;
 import commander.cls.file.FileInfo;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import javafx.util.Callback;
@@ -192,17 +193,24 @@ public class TransferPanel extends javax.swing.JPanel {
         dialogTransfer.setVisible(true);
     }
     
-    public void showDialog(TablePanel src, TablePanel des, int[] rows, int type) {
-        if (rows.length > 0 && !src.getPath().equals(des.getPath())) {
-            labelTransferItem.setText("Transfer " + rows.length + " item(s) to:");
+    public void showDialog(TablePanel src, TablePanel des, ArrayList<Integer> rows, int type) {
+        if (rows.size() > 0 && !src.getPath().equals(des.getPath())) {
+            labelTransferItem.setText("Transfer " + rows.size() + " item(s) to:");
             cbTransferOption.setSelectedIndex(type < 0 || type > 1 ? 0 : type);
             textTransferDestination.setText(des.getPath().toString());
             
             final FileModel srcModel = (FileModel)src.getTable().getModel();
             final FileModel desModel = (FileModel)des.getTable().getModel();
             transferCallback = () -> {
-                for (int i = 0; i < rows.length; i++) {
-                    desModel.addRow(srcModel.getRow(rows[i]));
+                for (int i = 0; i < rows.size(); i++) {
+                    final FileInfo fileInfo = srcModel.getRow(rows.get(i));
+                    DataController.getInstance().copyFile(
+                            fileInfo.file,
+                            Paths.get(des.getPath().toString(), fileInfo.name).toFile(),
+                            () -> { 
+                                desModel.addRow(fileInfo); 
+                                System.out.println("DONE COPY");
+                            });
                 }
             };
             

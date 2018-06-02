@@ -289,6 +289,7 @@ public class TablePanel extends javax.swing.JPanel {
         btnForward = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        btnReload = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -380,6 +381,21 @@ public class TablePanel extends javax.swing.JPanel {
         jTextField1.setPreferredSize(new java.awt.Dimension(73, 25));
         jPanel1.add(jTextField1);
 
+        btnReload.setText("@");
+        btnReload.setBorder(null);
+        btnReload.setFocusable(false);
+        btnReload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReload.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnReload.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnReload.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnReload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReloadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnReload);
+
         add(jPanel1);
 
         jScrollPane1.setToolTipText("");
@@ -421,11 +437,17 @@ public class TablePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
+        // TODO add your handling code here:
+        reload();
+    }//GEN-LAST:event_btnReloadActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnBackward;
     private javax.swing.JButton btnForward;
+    private javax.swing.JButton btnReload;
     private javax.swing.JComboBox<ComboItem> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

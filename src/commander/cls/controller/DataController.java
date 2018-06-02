@@ -37,7 +37,7 @@ public class DataController {
         listItem = new ArrayList<>();
     }
     
-    public void copyFile(File src, File dst) {
+    public void copyFile(File src, File dst, Runnable toRun) {
         try
         {
             InputStream in = new FileInputStream(src);
@@ -52,6 +52,7 @@ public class DataController {
                 totalBytesCopied += len;
                 int progress = (int)Math.round(((double)totalBytesCopied / (double)expectedBytes) * 100);
             }
+            toRun.run();
             in.close();
             out.close();
         }
