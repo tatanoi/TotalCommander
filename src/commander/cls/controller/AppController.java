@@ -51,11 +51,14 @@ public class AppController {
         transferPanel.showDialog(DataController.getInstance().getListItem(), "AAA", 0);
     }
     
+    public TransferPanel getTransferPanel() {
+        return transferPanel;
+    }
+    
     // Add item that we're going to transfer
     public void addItem(FileInfo item) {
         listItem.add(item);
     }
-    
     
     // Clear item from list
     public void clearItems() {

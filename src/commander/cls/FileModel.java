@@ -6,7 +6,6 @@
 package commander.cls;
 
 import commander.cls.file.FileInfo;
-import java.awt.List;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -74,7 +73,7 @@ public class FileModel extends AbstractTableModel {
         switch (column) {
             case 0: return String.class;
             case 1: return String.class;
-            case 2: return long.class;
+            case 2: return Long.class;
             case 3: return String.class;
             case 4: return String.class;
         }

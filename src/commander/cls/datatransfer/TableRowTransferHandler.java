@@ -104,7 +104,6 @@ public class TableRowTransferHandler extends TransferHandler {
          table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
    }
-
 }
 
 

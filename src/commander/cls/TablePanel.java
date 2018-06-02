@@ -6,6 +6,7 @@
 package commander.cls;
 
 import commander.cls.controller.DataController;
+import commander.cls.datatransfer.RowTransferHandler;
 import commander.cls.datatransfer.TableRowTransferHandler;
 import commander.cls.file.FileInfo;
 import java.awt.Color;
@@ -26,9 +27,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import javafx.scene.input.MouseButton;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
+import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
@@ -36,6 +39,7 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.TransferHandler;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
@@ -60,6 +64,18 @@ public class TablePanel extends javax.swing.JPanel {
         setupCombobox();
         setupNavigationBar();
         changeDirectory(Paths.get("C:/"));
+    }
+    
+    public JTable getTable() {
+        return jTable1;
+    }
+    
+    public Path getPath() {
+        return currentPath;
+    }
+    
+    public void reload() {
+        changeDirectory(currentPath, true);
     }
     
     /** Setup table */
@@ -167,8 +183,9 @@ public class TablePanel extends javax.swing.JPanel {
         
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setDragEnabled(true);
+        
         jTable1.setDropMode(DropMode.INSERT_ROWS);
-        jTable1.setTransferHandler(new TableRowTransferHandler(jTable1)); 
+        jTable1.setTransferHandler(new RowTransferHandler(this));
     }
     
     public void setupCombobox() {
@@ -227,9 +244,13 @@ public class TablePanel extends javax.swing.JPanel {
     
     /** Change directory using thread to make loading smoother */
     public boolean changeDirectory(Path path) {
+        return changeDirectory(path, false);
+    }
+    
+    public boolean changeDirectory(Path path, boolean isReload) {
         
-        if (this.currentPath != null && (this.currentPath.toString().equals(path.toString()) 
-                || !Files.exists(path) || !Files.isDirectory(path) || !Files.isReadable(path))) {
+        if (!isReload && this.currentPath != null && (this.currentPath.toString().equals(path.toString()) 
+            || !Files.exists(path) || !Files.isDirectory(path) || !Files.isReadable(path))) {
             return false;
         }
         

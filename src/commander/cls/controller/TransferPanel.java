@@ -5,8 +5,13 @@
  */
 package commander.cls.controller;
 
+import commander.cls.FileModel;
+import commander.cls.TablePanel;
 import commander.cls.file.FileInfo;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import javafx.util.Callback;
+import javax.swing.JTable;
 
 /**
  *
@@ -136,10 +141,12 @@ public class TransferPanel extends javax.swing.JPanel {
             case 0:
             // Copy
             System.out.println("Copy");
+            transferCallback.run();
             break;
             case 1:
             // Cut
             System.out.println("Cut");
+            transferCallback.run();
             break;
         }
         dialogTransfer.setVisible(false);
@@ -181,8 +188,30 @@ public class TransferPanel extends javax.swing.JPanel {
         }
         textTransferDestination.setText(des);
         cbTransferOption.setSelectedIndex(type < 0 || type > 1 ? 0 : type);
-        
         dialogTransfer.setLocationRelativeTo(AppController.getInstance().getParent());
         dialogTransfer.setVisible(true);
     }
+    
+    public void showDialog(TablePanel src, TablePanel des, int[] rows, int type) {
+        if (rows.length > 0 && !src.getPath().equals(des.getPath())) {
+            labelTransferItem.setText("Transfer " + rows.length + " item(s) to:");
+            cbTransferOption.setSelectedIndex(type < 0 || type > 1 ? 0 : type);
+            textTransferDestination.setText(des.getPath().toString());
+            
+            final FileModel srcModel = (FileModel)src.getTable().getModel();
+            final FileModel desModel = (FileModel)des.getTable().getModel();
+            transferCallback = () -> {
+                for (int i = 0; i < rows.length; i++) {
+                    desModel.addRow(srcModel.getRow(rows[i]));
+                }
+            };
+            
+            dialogTransfer.setLocationRelativeTo(AppController.getInstance().getParent());
+            dialogTransfer.setVisible(true);
+        }
+    }
+    
+    private Runnable transferCallback;
+    
+    
 }

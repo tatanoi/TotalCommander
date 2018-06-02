@@ -55,6 +55,16 @@ public class FileInfo {
         }
     }
     
+    @Override
+    public String toString() {
+        if (path != null) {
+            return path.toString();
+        }
+        else {
+            return null;
+        }
+    }
+    
     private static String parseExtension(String fileName) {
         String extension = "";
         int i = fileName.lastIndexOf('.');
