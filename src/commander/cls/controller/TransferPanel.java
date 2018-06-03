@@ -8,8 +8,10 @@ package commander.cls.controller;
 import commander.cls.FileModel;
 import commander.cls.TablePanel;
 import commander.cls.file.FileInfo;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 import javafx.util.Callback;
 import javax.swing.JTable;
@@ -138,17 +140,8 @@ public class TransferPanel extends javax.swing.JPanel {
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
-        switch (cbTransferOption.getSelectedIndex()) {
-            case 0:
-            // Copy
-            System.out.println("Copy");
+        if (transferCallback != null) {
             transferCallback.run();
-            break;
-            case 1:
-            // Cut
-            System.out.println("Cut");
-            transferCallback.run();
-            break;
         }
         dialogTransfer.setVisible(false);
     }//GEN-LAST:event_btnOKActionPerformed
@@ -195,22 +188,34 @@ public class TransferPanel extends javax.swing.JPanel {
     
     public void showDialog(TablePanel src, TablePanel des, ArrayList<Integer> rows, int type) {
         if (rows.size() > 0 && !src.getPath().equals(des.getPath())) {
+            Collections.sort(rows, Collections.reverseOrder());
             labelTransferItem.setText("Transfer " + rows.size() + " item(s) to:");
             cbTransferOption.setSelectedIndex(type < 0 || type > 1 ? 0 : type);
             textTransferDestination.setText(des.getPath().toString());
             
             final FileModel srcModel = (FileModel)src.getTable().getModel();
             final FileModel desModel = (FileModel)des.getTable().getModel();
+            
             transferCallback = () -> {
                 for (int i = 0; i < rows.size(); i++) {
                     final FileInfo fileInfo = srcModel.getRow(rows.get(i));
-                    DataController.getInstance().copyFile(
-                            fileInfo,
-                            Paths.get(des.getPath().toString(), fileInfo.name).toFile(),
-                            () -> { 
-                                desModel.addRow(new FileInfo(Paths.get(des.getPath().toString(), fileInfo.name))); 
-                                System.out.println("DONE COPY");
-                            });
+                    final Path desPath = Paths.get(des.getPath().toString(), fileInfo.name);
+                    final int index = rows.get(i);
+                    switch (cbTransferOption.getSelectedIndex()) {
+                    case 0:
+                        DataController.getInstance().copyFile(fileInfo, desPath.toFile(), () -> { 
+                            desModel.addRow(new FileInfo(desPath)); 
+                            System.out.println("DONE COPY");
+                        });
+                        break;
+                    case 1:
+                        DataController.getInstance().moveFile(fileInfo, desPath.toFile(), () -> { 
+                            srcModel.removeRow(index);
+                            desModel.addRow(new FileInfo(desPath)); 
+                            System.out.println("DONE MOVE");
+                        });
+                        break;
+                    }
                 }
             };
             

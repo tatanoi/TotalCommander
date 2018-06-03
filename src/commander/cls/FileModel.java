@@ -123,6 +123,12 @@ public class FileModel extends AbstractTableModel {
         return files.get(rowIndex);
     }
     
+    public void removeRow(int index) {
+        this.files.remove(index);
+        this.editableCells.remove(index);
+        this.fireTableRowsDeleted(index, index);
+    }
+    
     public void addRow(FileInfo fileInfo) {
         this.files.add(fileInfo);
         this.editableCells.add(new boolean[getColumnCount()]);

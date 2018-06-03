@@ -12,6 +12,7 @@ import java.io.FileFilter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 
@@ -68,11 +69,11 @@ public class DataController {
         {
             boolean isDesExist = Files.exists(dst.toPath());
             if (src.isReadable) {
-                if (src.isFile) {
-                    FileUtils.moveFile(src.file, dst);
+                if (src.isDirectory) {
+                    FileUtils.moveDirectoryToDirectory(src.file, dst.getParentFile(), true);
                 }
                 else {
-                    FileUtils.moveDirectory(src.file, dst);
+                    FileUtils.moveFileToDirectory(src.file, dst.getParentFile(), true);
                 }
                 if (!isDesExist) {
                     toRun.run();
