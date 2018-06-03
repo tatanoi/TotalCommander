@@ -23,6 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.DropMode;
@@ -147,6 +149,21 @@ public class TablePanel extends javax.swing.JPanel {
                         if (f.isReadable && f.isWriteable) {
                             model.setCellEditable(row, 0, true);
                             model.setValueAt(model.getValueAt(row, 0), row, 0);
+                        }
+                    }
+                    else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                        int[] selectedRows = table.getSelectedRows();
+                        ArrayList<Integer> convertRows = new ArrayList<>();
+                        for (int i = 0; i < selectedRows.length; i++) {
+                            convertRows.add(table.convertRowIndexToModel(selectedRows[i]));
+                        }
+                        Collections.sort(convertRows, Collections.reverseOrder());
+                        FileModel model = (FileModel)table.getModel();
+                        for (int i = 0; i < convertRows.size(); i++) {
+                            final int r = convertRows.get(i);
+                            DataController.getInstance().deleteFile(model.getRow(r), () -> {
+                                model.removeRow(r);
+                            });
                         }
                     }
                 }

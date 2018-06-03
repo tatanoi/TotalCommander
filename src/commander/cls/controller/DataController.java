@@ -86,10 +86,9 @@ public class DataController {
         }
     }
     
-    public void deleteFile(FileInfo src, File dst, Runnable toRun) {
-         try
+    public void deleteFile(FileInfo src, Runnable toRun) {
+        try
         {
-            boolean isDesExist = Files.exists(dst.toPath());
             if (src.isReadable) {
                 if (src.isFile) {
                     FileUtils.forceDelete(src.file);
@@ -97,9 +96,7 @@ public class DataController {
                 else {
                     FileUtils.deleteDirectory(src.file);
                 }
-                if (!isDesExist) {
-                    toRun.run();
-                }
+                toRun.run();
             }
         }
         catch (Exception ex)
