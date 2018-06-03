@@ -8,10 +8,10 @@ package commander.cls.controller;
 import commander.cls.TablePanel;
 import commander.cls.file.FileInfo;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.FileFilter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 
@@ -36,28 +36,93 @@ public class DataController {
         listItem = new ArrayList<>();
     }
     
-    public void copyFile(File src, File dst, Runnable toRun) {
+    public void copyFile(FileInfo src, File dst, Runnable toRun) {
         try
         {
-            InputStream in = new FileInputStream(src);
-            OutputStream out = new FileOutputStream(dst);
-            // Transfer bytes from in to out
-            long expectedBytes = src.length(); // This is the number of bytes we expected to copy..
-            long totalBytesCopied = 0; // This will track the total number of bytes we've copied
-            byte[] buf = new byte[1024];
-            int len = 0;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-                totalBytesCopied += len;
-                int progress = (int)Math.round(((double)totalBytesCopied / (double)expectedBytes) * 100);
+            boolean isDesExist = Files.exists(dst.toPath());
+            if (src.isReadable) {
+                if (src.isFile) {
+                    FileUtils.copyFile(src.file, dst);
+                }
+                else {
+                    FileUtils.copyDirectory(src.file, dst, new FileFilter() {
+                        @Override 
+                        public boolean accept(File file) {
+                            return Files.isReadable(file.toPath());
+                        }
+                    });
+                }
+                if (!isDesExist) {
+                    toRun.run();
+                }
             }
-            toRun.run();
-            in.close();
-            out.close();
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+    
+    public void moveFile(FileInfo src, File dst, Runnable toRun) {
+        try
+        {
+            boolean isDesExist = Files.exists(dst.toPath());
+            if (src.isReadable) {
+                if (src.isFile) {
+                    FileUtils.moveFile(src.file, dst);
+                }
+                else {
+                    FileUtils.moveDirectory(src.file, dst);
+                }
+                if (!isDesExist) {
+                    toRun.run();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void deleteFile(FileInfo src, File dst, Runnable toRun) {
+         try
+        {
+            boolean isDesExist = Files.exists(dst.toPath());
+            if (src.isReadable) {
+                if (src.isFile) {
+                    FileUtils.forceDelete(src.file);
+                }
+                else {
+                    FileUtils.deleteDirectory(src.file);
+                }
+                if (!isDesExist) {
+                    toRun.run();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+    
+    public File renameFile(FileInfo src, String newName) {
+        try {
+            Path des = Paths.get(src.file.getParent(), newName);
+            if (Files.exists(des) || Files.isReadable(des)) {
+                System.out.println(des.toString() + " exists or permission");
+                return null;
+            } 
+            else {
+                File desFile = des.toFile();
+                src.file.renameTo(desFile);
+                return desFile;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
     
@@ -66,6 +131,4 @@ public class DataController {
     }
     
     public TablePanel srcPanel;
-    
-    
 }

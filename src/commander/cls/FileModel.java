@@ -5,7 +5,9 @@
  */
 package commander.cls;
 
+import commander.cls.controller.DataController;
 import commander.cls.file.FileInfo;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -16,10 +18,13 @@ import javax.swing.table.AbstractTableModel;
 public class FileModel extends AbstractTableModel {
 
     private ArrayList<FileInfo> files;
-    
+    private ArrayList<boolean[]> editableCells;
+    private boolean isInEditing;
     
     public FileModel() {
         this.files = new ArrayList<>();
+        this.editableCells = new ArrayList<>();
+        this.isInEditing = false;
     }
     
     
@@ -80,6 +85,39 @@ public class FileModel extends AbstractTableModel {
         return Object.class;
     }
     
+    @Override
+    public boolean isCellEditable(int row, int column) { // custom isCellEditable function
+        return this.editableCells.get(row)[column];
+    }
+    
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        if (rowIndex < 0 || rowIndex >= getRowCount()) {
+            // throw exception
+            return;
+        }
+        if (columnIndex < 0 || columnIndex >= getColumnCount()) {
+           // throw exception
+           return;
+        }
+
+        FileInfo fileInfo = this.getRow(rowIndex);
+        switch (columnIndex) {
+        case 0:
+            File renameFile = DataController.getInstance().renameFile(fileInfo, String.valueOf(aValue));
+            if (renameFile != null) {
+                this.files.set(rowIndex, new FileInfo(renameFile.toPath()));
+            }
+        }
+        
+        setCellEditable(rowIndex, columnIndex, isInEditing = !isInEditing);
+        fireTableRowsUpdated(rowIndex, rowIndex);
+    }
+    
+    public void setCellEditable(int row, int col, boolean value) {
+        this.editableCells.get(row)[col] = value; // set cell true/false
+        this.fireTableCellUpdated(row, col);
+    }
     
     public FileInfo getRow(int rowIndex) {
         return files.get(rowIndex);
@@ -87,11 +125,13 @@ public class FileModel extends AbstractTableModel {
     
     public void addRow(FileInfo fileInfo) {
         this.files.add(fileInfo);
+        this.editableCells.add(new boolean[getColumnCount()]);
         this.fireTableRowsInserted(files.size() - 1, files.size() - 1);
     }
     
     public void clear() {
         this.files.clear();
+        this.editableCells.clear();
         this.fireTableDataChanged();
     }
 }

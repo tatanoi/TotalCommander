@@ -205,10 +205,10 @@ public class TransferPanel extends javax.swing.JPanel {
                 for (int i = 0; i < rows.size(); i++) {
                     final FileInfo fileInfo = srcModel.getRow(rows.get(i));
                     DataController.getInstance().copyFile(
-                            fileInfo.file,
+                            fileInfo,
                             Paths.get(des.getPath().toString(), fileInfo.name).toFile(),
                             () -> { 
-                                desModel.addRow(fileInfo); 
+                                desModel.addRow(new FileInfo(Paths.get(des.getPath().toString(), fileInfo.name))); 
                                 System.out.println("DONE COPY");
                             });
                 }

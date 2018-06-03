@@ -91,16 +91,15 @@ public class TablePanel extends javax.swing.JPanel {
                     FileModel model = (FileModel)table.getModel();
                     row = table.convertRowIndexToModel(row);
                     FileInfo f = model.getRow(row);
-                    if (f.isDirectory) {
-                        changeDirectory(f.path);
-                    }
-                    else {
-                        // OPEN FILE
-                        try {
-                            Desktop.getDesktop().open(f.file);
+                    if (f.isReadable) {
+                        if (f.isDirectory) {
+                            changeDirectory(f.path);
                         }
-                        catch (Exception ex) {
-                            ex.printStackTrace();
+                        else {
+                            try {
+                                Desktop.getDesktop().open(f.file);
+                            }
+                            catch (Exception ex) { ex.printStackTrace(); }
                         }
                     }
                 }
@@ -123,27 +122,35 @@ public class TablePanel extends javax.swing.JPanel {
             }
         });
         jTable1.addKeyListener(new KeyAdapter() {
-             public void keyPressed(KeyEvent e) {
+            public void keyPressed(KeyEvent e) {
                 JTable table =(JTable) e.getSource();
                 int row = table.getSelectedRow();
-                if (e.getKeyCode() == KeyEvent.VK_ENTER && row != -1) {
-                    FileModel model = (FileModel)table.getModel();
-                    row = table.convertRowIndexToModel(row);
-                    FileInfo f = model.getRow(row);
-                    if (f.isDirectory) {
-                        changeDirectory(f.path);
-                    }
-                    else {
-                        // OPEN FILE
-                        try {
-                            Desktop.getDesktop().open(f.file);
+                if (row != -1); {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        FileModel model = (FileModel)table.getModel();
+                        row = table.convertRowIndexToModel(row);
+                        FileInfo f = model.getRow(row);
+                        if (f.isDirectory) {
+                            changeDirectory(f.path);
                         }
-                        catch (Exception ex) {
-                            
+                        else {
+                            try {
+                                Desktop.getDesktop().open(f.file);
+                            }
+                            catch (Exception ex) { }
+                        }
+                    }
+                    else if (e.getKeyCode() == KeyEvent.VK_F12) {
+                        FileModel model = (FileModel)table.getModel();
+                        row = table.convertRowIndexToModel(row);
+                        FileInfo f = model.getRow(row);
+                        if (f.isReadable && f.isWriteable) {
+                            model.setCellEditable(row, 0, true);
+                            model.setValueAt(model.getValueAt(row, 0), row, 0);
                         }
                     }
                 }
-             }
+            }
         });
         jTable1.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent e) {
@@ -173,7 +180,6 @@ public class TablePanel extends javax.swing.JPanel {
         
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setDragEnabled(true);
-        
         jTable1.setDropMode(DropMode.INSERT_ROWS);
         jTable1.setTransferHandler(new RowTransferHandler(this));
     }
