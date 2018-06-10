@@ -45,12 +45,6 @@ public class MainJFrame extends javax.swing.JFrame {
         btnRename = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         tablePanel3 = new commander.cls.TablePanel();
-        jPanel3 = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -68,11 +62,10 @@ public class MainJFrame extends javax.swing.JFrame {
         jToolBar1.setMinimumSize(new java.awt.Dimension(63, 35));
         jToolBar1.setPreferredSize(new java.awt.Dimension(63, 35));
 
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 1, 1);
-        flowLayout1.setAlignOnBaseline(true);
-        jPanel4.setLayout(flowLayout1);
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
-        btnNotepad.setBackground(new java.awt.Color(255, 204, 51));
+        btnNotepad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/notepad-icon.png"))); // NOI18N
+        btnNotepad.setToolTipText("New txt fle");
         btnNotepad.setBorderPainted(false);
         btnNotepad.setFocusable(false);
         btnNotepad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -92,7 +85,8 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jPanel4.add(btnNotepad);
 
-        btnNewFolder.setBackground(new java.awt.Color(51, 255, 102));
+        btnNewFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/folder-icon.png"))); // NOI18N
+        btnNewFolder.setToolTipText("New folder");
         btnNewFolder.setBorderPainted(false);
         btnNewFolder.setFocusable(false);
         btnNewFolder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -128,7 +122,7 @@ public class MainJFrame extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 85, Short.MAX_VALUE)
+            .addGap(0, 104, Short.MAX_VALUE)
         );
 
         jPanel2.add(jPanel5);
@@ -137,6 +131,8 @@ public class MainJFrame extends javax.swing.JFrame {
         flowLayout2.setAlignOnBaseline(true);
         jPanel7.setLayout(flowLayout2);
 
+        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/copy-icon.png"))); // NOI18N
+        btnCopy.setToolTipText("Copy");
         btnCopy.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnCopy.setBorderPainted(false);
         btnCopy.setFocusable(false);
@@ -152,6 +148,8 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jPanel7.add(btnCopy);
 
+        btnRename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/rename-icon.png"))); // NOI18N
+        btnRename.setToolTipText("Rename");
         btnRename.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnRename.setBorderPainted(false);
         btnRename.setFocusable(false);
@@ -177,7 +175,7 @@ public class MainJFrame extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 85, Short.MAX_VALUE)
+            .addGap(0, 104, Short.MAX_VALUE)
         );
 
         jPanel2.add(jPanel6);
@@ -186,38 +184,6 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel1.add(tablePanel3);
 
         getContentPane().add(jPanel1);
-
-        jPanel3.setMaximumSize(new java.awt.Dimension(65584, 35));
-        jPanel3.setMinimumSize(new java.awt.Dimension(0, 35));
-        jPanel3.setPreferredSize(new java.awt.Dimension(1000, 35));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
-
-        jButton6.setBorder(null);
-        jButton6.setMaximumSize(new java.awt.Dimension(65584, 35));
-        jButton6.setMinimumSize(new java.awt.Dimension(35, 35));
-        jPanel3.add(jButton6);
-
-        jButton7.setBorder(null);
-        jButton7.setMaximumSize(new java.awt.Dimension(65584, 35));
-        jButton7.setMinimumSize(new java.awt.Dimension(35, 35));
-        jPanel3.add(jButton7);
-
-        jButton8.setBorder(null);
-        jButton8.setMaximumSize(new java.awt.Dimension(65584, 35));
-        jButton8.setMinimumSize(new java.awt.Dimension(35, 35));
-        jPanel3.add(jButton8);
-
-        jButton9.setBorder(null);
-        jButton9.setMaximumSize(new java.awt.Dimension(65584, 35));
-        jButton9.setMinimumSize(new java.awt.Dimension(35, 35));
-        jPanel3.add(jButton9);
-
-        jButton10.setBorder(null);
-        jButton10.setMaximumSize(new java.awt.Dimension(65584, 35));
-        jButton10.setMinimumSize(new java.awt.Dimension(35, 35));
-        jPanel3.add(jButton10);
-
-        getContentPane().add(jPanel3);
 
         jMenu1.setText("File");
 
@@ -297,18 +263,12 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnNewFolder;
     private javax.swing.JButton btnNotepad;
     private javax.swing.JButton btnRename;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
