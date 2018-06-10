@@ -5,15 +5,22 @@
  */
 package commander.cls.controller;
 
+import commander.cls.FileModel;
 import commander.cls.TablePanel;
 import commander.cls.file.FileInfo;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileFilter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -60,7 +67,11 @@ public class DataController {
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                    "Oops, something must be wrong. Check whether file / folder exists or permissison restrict", 
+                    "Error occur", 
+                    JOptionPane.ERROR_MESSAGE);
+            desPanel.reload();
         }
     }
     
@@ -82,7 +93,11 @@ public class DataController {
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                    "Oops, something must be wrong. Check whether file / folder exists or permissison restrict", 
+                    "Error occur", 
+                    JOptionPane.ERROR_MESSAGE);
+            desPanel.reload();
         }
     }
     
@@ -101,7 +116,11 @@ public class DataController {
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                    "Oops, something must be wrong. Check whether file / folder exists or permissison restrict", 
+                    "Error occur", 
+                    JOptionPane.ERROR_MESSAGE);
+            desPanel.reload();
         }
     }
     
@@ -119,7 +138,11 @@ public class DataController {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                    "Oops, something must be wrong. Check whether file / folder exists or permissison restrict", 
+                    "Error occur", 
+                    JOptionPane.ERROR_MESSAGE);
+            desPanel.reload();
             return null;
         }
     }
@@ -128,5 +151,91 @@ public class DataController {
         return listItem;
     }
     
+    public void newTextDocument() {
+        if (!srcPanel.getIsDone()) { 
+            JOptionPane.showMessageDialog(null,
+                    String.format("Please wait for finish loading.."),
+                    "Please wait", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int number = 0;
+        String textDocumentName = "New Text Document.txt";
+        Path textDocumentPath = Paths.get(srcPanel.getPath().toString(), textDocumentName);
+        
+        while (Files.exists(textDocumentPath)) {
+            number++;
+            textDocumentName = String.format("New Text Document (%d).txt", number);
+            textDocumentPath = Paths.get(srcPanel.getPath().toString(), textDocumentName);
+        }
+        
+        try {
+            Path newFile = Files.createFile(textDocumentPath);
+            JTable table = srcPanel.getTable();
+            FileModel model = (FileModel)table.getModel();
+            model.addRow(new FileInfo(newFile));
+            int row = model.getRowCount() - 1;
+            table.scrollRectToVisible(table.getCellRect(row, 0, true));
+            table.setRowSelectionInterval(row, row);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    String.format("Cannot create %s", textDocumentPath.toString()),
+                    "Error creating file", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void newFolder() {
+        if (!srcPanel.getIsDone()) { 
+            JOptionPane.showMessageDialog(null,
+                    String.format("Please wait for finish loading.."),
+                    "Please wait", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int number = 0;
+        String folderName = "New Folder";
+        Path folderPath = Paths.get(srcPanel.getPath().toString(), folderName);
+        
+        while (Files.exists(folderPath)) {
+            number++;
+            folderName = String.format("New Folder (%d)", number);
+            folderPath = Paths.get(srcPanel.getPath().toString(), folderName);
+        }
+        
+        try {
+            Path newFile = Files.createDirectory(folderPath);
+            JTable table = srcPanel.getTable();
+            FileModel model = (FileModel)table.getModel();
+            model.addRow(new FileInfo(newFile));
+            table.scrollRectToVisible(table.getCellRect(model.getRowCount() - 1, 0, true));
+            table.setRowSelectionInterval(model.getRowCount() - 1, model.getRowCount() - 1);
+            model.setCellEditable(model.getRowCount() - 1, 0, true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    String.format("Cannot create %s", folderPath.toString()),
+                    "Error creating folder", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     public TablePanel srcPanel;
+    public TablePanel desPanel;
+    
+    public void setDestinationPanel(TablePanel panel) {
+        desPanel = panel;
+    }
+    
+    public void setSourcePanel(TablePanel panel) {
+        srcPanel.getPanelFocus().setBackground(panel.getBackground());
+        srcPanel = panel;
+        srcPanel.getPanelFocus().setBackground(Color.decode("#1c5ec9"));
+    }
+    
+    public TablePanel getSourcePanel() {
+        return srcPanel;
+    }
 }

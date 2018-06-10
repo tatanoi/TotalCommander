@@ -8,12 +8,16 @@ package commander.cls;
 import commander.cls.controller.DataController;
 import commander.cls.datatransfer.RowTransferHandler;
 import commander.cls.file.FileInfo;
+import commander.cls.file.History;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -31,6 +35,7 @@ import javax.swing.DropMode;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -41,36 +46,81 @@ import javax.swing.KeyStroke;
  */
 public class TablePanel extends javax.swing.JPanel {
     
+    private TablePanel thisPanel;
     private Path currentPath;
+    private History history;
+    private boolean isDone = false;
     private LoadDirectoryThread threadStop; // change directory thread
     
     /** For jCombobox1 */
     private int previousIndex; // previous combobox index
     private ActionListener comboActionListener;
-    /**
-     * Creates new form TablePanel1
-     */
+    
     public TablePanel() {
         initComponents();
+        thisPanel = this;
+        history = new History();
+        
+        if (DataController.getInstance().srcPanel == null) {
+            DataController.getInstance().srcPanel = this;
+        }
+        
+        setupFocus();
         setupTable();
         setupCombobox();
         setupNavigationBar();
         changeDirectory(Paths.get("C:/"));
     }
     
+    public void setupFocus() {
+        FocusAdapter focusAdapter = new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                DataController.getInstance().setSourcePanel(thisPanel);
+            }
+        };
+        
+        btnBack.addFocusListener(focusAdapter);
+        btnBackward.addFocusListener(focusAdapter);
+        btnForward.addFocusListener(focusAdapter);
+        btnReload.addFocusListener(focusAdapter);
+        btnRoot.addFocusListener(focusAdapter);
+        comboBoxDirectory.addFocusListener(focusAdapter);
+        jTextField1.addFocusListener(focusAdapter);
+        jTable1.addFocusListener(focusAdapter);
+    }
+    
     public JTable getTable() {
         return jTable1;
+    }
+    
+    public JPanel getPanelFocus() {
+        return panelFocus;
     }
     
     public Path getPath() {
         return currentPath;
     }
     
+    public boolean getIsDone() {
+        return isDone;
+    }
+    
+    public void setStatus(boolean done) {
+        if (!done) {
+            labelStatus.setText("Loading...");
+            labelStatus.setForeground(Color.red);
+        }
+        else {
+            labelStatus.setText("Done");
+            labelStatus.setForeground(Color.decode("#188203"));
+        }
+        isDone = done;
+    }
+    
     public void reload() {
         changeDirectory(currentPath, true);
     }
     
-    /** Setup table */
     public void setupTable() {
         
         jTable1.setModel(new FileModel());
@@ -196,6 +246,7 @@ public class TablePanel extends javax.swing.JPanel {
         });
         
         jTable1.setAutoCreateRowSorter(true);
+        jTable1.setFillsViewportHeight(true);
         jTable1.setDragEnabled(true);
         jTable1.setDropMode(DropMode.INSERT_ROWS);
         jTable1.setTransferHandler(new RowTransferHandler(this));
@@ -215,11 +266,11 @@ public class TablePanel extends javax.swing.JPanel {
             }
         };
         
-        jComboBox1.removeAllItems();
-        jComboBox1.addActionListener(comboActionListener);
+        comboBoxDirectory.removeAllItems();
+        comboBoxDirectory.addActionListener(comboActionListener);
         
         Iterable<Path> roots = FileSystems.getDefault().getRootDirectories();
-        roots.forEach(root -> jComboBox1.addItem(new ComboItem(root.toString(), new RootInfo(root))));
+        roots.forEach(root -> comboBoxDirectory.addItem(new ComboItem(root.toString(), new RootInfo(root))));
     }
     
     public void setupNavigationBar() {
@@ -235,16 +286,16 @@ public class TablePanel extends javax.swing.JPanel {
                         changeDirectory(path);
                         
                         String root = currentPath.getRoot().toString();
-                        jComboBox1.removeActionListener(comboActionListener);
-                        for (int i = 0; i < jComboBox1.getItemCount(); i++) {
-                            System.out.println(root + " | " + jComboBox1.getItemAt(i).getKey());
-                            if (jComboBox1.getItemAt(i).getKey().equals(root)) {
-                                jComboBox1.setSelectedIndex(i);
+                        comboBoxDirectory.removeActionListener(comboActionListener);
+                        for (int i = 0; i < comboBoxDirectory.getItemCount(); i++) {
+                            System.out.println(root + " | " + comboBoxDirectory.getItemAt(i).getKey());
+                            if (comboBoxDirectory.getItemAt(i).getKey().equals(root)) {
+                                comboBoxDirectory.setSelectedIndex(i);
                                 break;
                             }
                         }
                         
-                        jComboBox1.addActionListener(comboActionListener);
+                        comboBoxDirectory.addActionListener(comboActionListener);
                         textField.setText(currentPath.toString());
                     } 
                 }
@@ -255,13 +306,12 @@ public class TablePanel extends javax.swing.JPanel {
         });
     }
     
-    /** Change directory using thread to make loading smoother */
     public boolean changeDirectory(Path path) {
         return changeDirectory(path, false);
     }
     
     public boolean changeDirectory(Path path, boolean isReload) {
-        
+        if (path == null) { return false; }
         if (!isReload && this.currentPath != null && (this.currentPath.toString().equals(path.toString()) 
             || !Files.exists(path) || !Files.isDirectory(path) || !Files.isReadable(path))) {
             return false;
@@ -276,8 +326,34 @@ public class TablePanel extends javax.swing.JPanel {
         } 
         
         this.currentPath = path;
+        this.history.add(path);
         this.jTextField1.setText(currentPath.toString());
-        this.threadStop = new LoadDirectoryThread(jTable1, path);
+        this.threadStop = new LoadDirectoryThread(this, path);
+        
+        Thread thread = new Thread(threadStop);
+        thread.start();
+        return true;
+    }
+    
+    public boolean changeDirectoryByHistory(Path path) {
+        
+        if (path == null) { return false; }
+        if (this.currentPath != null && (currentPath.compareTo(path) == 0
+            || !Files.exists(path) || !Files.isDirectory(path) || !Files.isReadable(path))) {
+            return false;
+        }
+        
+        if (threadStop != null) {
+            threadStop.stopRequest();
+            try {
+                Thread.currentThread().sleep(10);
+            } catch (Exception e) { }
+            
+        } 
+        
+        this.currentPath = path;
+        this.jTextField1.setText(currentPath.toString());
+        this.threadStop = new LoadDirectoryThread(this, path);
         
         Thread thread = new Thread(threadStop);
         thread.start();
@@ -292,19 +368,25 @@ public class TablePanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel2 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxDirectory = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        labelStatus = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btnBackward = new javax.swing.JButton();
         btnForward = new javax.swing.JButton();
+        btnReload = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        btnReload = new javax.swing.JButton();
+        btnRoot = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        panelFocus = new javax.swing.JPanel();
 
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -313,11 +395,11 @@ public class TablePanel extends javax.swing.JPanel {
         jPanel2.setPreferredSize(new java.awt.Dimension(25, 28));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
-        jComboBox1.setMaximumSize(new java.awt.Dimension(75, 25));
-        jComboBox1.setMinimumSize(new java.awt.Dimension(75, 25));
-        jComboBox1.setName(""); // NOI18N
-        jComboBox1.setPreferredSize(new java.awt.Dimension(75, 25));
-        jPanel2.add(jComboBox1);
+        comboBoxDirectory.setMaximumSize(new java.awt.Dimension(75, 25));
+        comboBoxDirectory.setMinimumSize(new java.awt.Dimension(75, 25));
+        comboBoxDirectory.setName(""); // NOI18N
+        comboBoxDirectory.setPreferredSize(new java.awt.Dimension(75, 25));
+        jPanel2.add(comboBoxDirectory);
 
         jPanel3.setMaximumSize(new java.awt.Dimension(5, 32767));
         jPanel3.setMinimumSize(new java.awt.Dimension(5, 100));
@@ -336,7 +418,37 @@ public class TablePanel extends javax.swing.JPanel {
         jPanel2.add(jPanel3);
 
         jLabel1.setText("Drive size");
+        jLabel1.setMaximumSize(new java.awt.Dimension(32767, 16));
+        jLabel1.setMinimumSize(new java.awt.Dimension(100, 16));
         jPanel2.add(jLabel1);
+
+        jPanel4.setMaximumSize(new java.awt.Dimension(75, 32767));
+        jPanel4.setMinimumSize(new java.awt.Dimension(75, 100));
+
+        labelStatus.setText("Loading...");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 75, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(labelStatus)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(labelStatus)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jPanel2.add(jPanel4);
 
         add(jPanel2);
 
@@ -347,7 +459,7 @@ public class TablePanel extends javax.swing.JPanel {
 
         btnBackward.setText("<");
         btnBackward.setBorder(null);
-        btnBackward.setFocusable(false);
+        btnBackward.setFocusPainted(false);
         btnBackward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBackward.setMaximumSize(new java.awt.Dimension(25, 25));
         btnBackward.setMinimumSize(new java.awt.Dimension(25, 25));
@@ -362,7 +474,7 @@ public class TablePanel extends javax.swing.JPanel {
 
         btnForward.setText(">");
         btnForward.setBorder(null);
-        btnForward.setFocusable(false);
+        btnForward.setFocusPainted(false);
         btnForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnForward.setMaximumSize(new java.awt.Dimension(25, 25));
         btnForward.setMinimumSize(new java.awt.Dimension(25, 25));
@@ -375,9 +487,24 @@ public class TablePanel extends javax.swing.JPanel {
         });
         jPanel1.add(btnForward);
 
+        btnReload.setText("@");
+        btnReload.setBorder(null);
+        btnReload.setFocusPainted(false);
+        btnReload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReload.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnReload.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnReload.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnReload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReloadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnReload);
+
         btnBack.setText("^");
         btnBack.setBorder(null);
-        btnBack.setFocusable(false);
+        btnBack.setFocusPainted(false);
         btnBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBack.setMaximumSize(new java.awt.Dimension(25, 25));
         btnBack.setMinimumSize(new java.awt.Dimension(25, 25));
@@ -394,20 +521,20 @@ public class TablePanel extends javax.swing.JPanel {
         jTextField1.setPreferredSize(new java.awt.Dimension(73, 25));
         jPanel1.add(jTextField1);
 
-        btnReload.setText("@");
-        btnReload.setBorder(null);
-        btnReload.setFocusable(false);
-        btnReload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnReload.setMaximumSize(new java.awt.Dimension(25, 25));
-        btnReload.setMinimumSize(new java.awt.Dimension(25, 25));
-        btnReload.setPreferredSize(new java.awt.Dimension(25, 25));
-        btnReload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnReload.addActionListener(new java.awt.event.ActionListener() {
+        btnRoot.setText("*");
+        btnRoot.setBorder(null);
+        btnRoot.setFocusPainted(false);
+        btnRoot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRoot.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnRoot.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnRoot.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnRoot.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRoot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReloadActionPerformed(evt);
+                btnRootActionPerformed(evt);
             }
         });
-        jPanel1.add(btnReload);
+        jPanel1.add(btnRoot);
 
         add(jPanel1);
 
@@ -432,15 +559,41 @@ public class TablePanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTable1);
 
         add(jScrollPane1);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 2));
+        jPanel5.setMaximumSize(new java.awt.Dimension(32767, 5));
+        jPanel5.setMinimumSize(new java.awt.Dimension(100, 5));
+        jPanel5.setPreferredSize(new java.awt.Dimension(433, 5));
+        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
+
+        panelFocus.setMaximumSize(new java.awt.Dimension(32767, 5));
+        panelFocus.setMinimumSize(new java.awt.Dimension(100, 5));
+        panelFocus.setPreferredSize(new java.awt.Dimension(433, 5));
+
+        javax.swing.GroupLayout panelFocusLayout = new javax.swing.GroupLayout(panelFocus);
+        panelFocus.setLayout(panelFocusLayout);
+        panelFocusLayout.setHorizontalGroup(
+            panelFocusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 428, Short.MAX_VALUE)
+        );
+        panelFocusLayout.setVerticalGroup(
+            panelFocusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 5, Short.MAX_VALUE)
+        );
+
+        jPanel5.add(panelFocus);
+
+        add(jPanel5);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackwardActionPerformed
         // TODO add your handling code here:
-        
+        changeDirectoryByHistory(history.backward());
     }//GEN-LAST:event_btnBackwardActionPerformed
 
     private void btnForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         // TODO add your handling code here:
+        changeDirectoryByHistory(history.forward());
     }//GEN-LAST:event_btnForwardActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -455,19 +608,29 @@ public class TablePanel extends javax.swing.JPanel {
         reload();
     }//GEN-LAST:event_btnReloadActionPerformed
 
+    private void btnRootActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRootActionPerformed
+        // TODO add your handling code here:
+        changeDirectory(currentPath.getRoot());
+    }//GEN-LAST:event_btnRootActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnBackward;
     private javax.swing.JButton btnForward;
     private javax.swing.JButton btnReload;
-    private javax.swing.JComboBox<ComboItem> jComboBox1;
+    private javax.swing.JButton btnRoot;
+    private javax.swing.JComboBox<ComboItem> comboBoxDirectory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel labelStatus;
+    private javax.swing.JPanel panelFocus;
     // End of variables declaration//GEN-END:variables
 }

@@ -59,7 +59,7 @@ public class RowTransferHandler extends TransferHandler {
 
     @Override
     public int getSourceActions(JComponent c) {
-        DataController.getInstance().srcPanel = panel;
+        DataController.getInstance().setSourcePanel(panel);
         return TransferHandler.COPY_OR_MOVE;
     }
 
@@ -67,6 +67,7 @@ public class RowTransferHandler extends TransferHandler {
     public boolean importData(TransferHandler.TransferSupport info) {
         try {
             ArrayList<Integer> rows = (ArrayList<Integer>) info.getTransferable().getTransferData(flavor);
+            DataController.getInstance().setDestinationPanel(panel);
             AppController.getInstance()
                     .getTransferPanel()
                     .showDialog(DataController.getInstance().srcPanel, panel, rows, 0);

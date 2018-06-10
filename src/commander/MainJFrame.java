@@ -6,6 +6,7 @@
 package commander;
 
 import commander.cls.controller.AppController;
+import commander.cls.controller.DataController;
 
 /**
  *
@@ -33,11 +34,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jToolBar1 = new javax.swing.JToolBar();
         jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnNotepad = new javax.swing.JButton();
+        btnNewFolder = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tablePanel1 = new commander.cls.TablePanel();
         jPanel2 = new javax.swing.JPanel();
@@ -74,55 +72,40 @@ public class MainJFrame extends javax.swing.JFrame {
         flowLayout1.setAlignOnBaseline(true);
         jPanel4.setLayout(flowLayout1);
 
-        jButton1.setBorderPainted(false);
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setMaximumSize(new java.awt.Dimension(30, 30));
-        jButton1.setMinimumSize(new java.awt.Dimension(30, 30));
-        jButton1.setPreferredSize(new java.awt.Dimension(30, 30));
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnNotepad.setBackground(new java.awt.Color(255, 204, 51));
+        btnNotepad.setBorderPainted(false);
+        btnNotepad.setFocusable(false);
+        btnNotepad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNotepad.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnNotepad.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnNotepad.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnNotepad.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNotepad.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                btnNotepadMouseClicked(evt);
             }
         });
-        jPanel4.add(jButton1);
+        btnNotepad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNotepadActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnNotepad);
 
-        jButton2.setBorderPainted(false);
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setMaximumSize(new java.awt.Dimension(30, 30));
-        jButton2.setMinimumSize(new java.awt.Dimension(30, 30));
-        jButton2.setPreferredSize(new java.awt.Dimension(30, 30));
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel4.add(jButton2);
-
-        jButton3.setBorderPainted(false);
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setMaximumSize(new java.awt.Dimension(30, 30));
-        jButton3.setMinimumSize(new java.awt.Dimension(30, 30));
-        jButton3.setPreferredSize(new java.awt.Dimension(30, 30));
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel4.add(jButton3);
-
-        jButton4.setBorderPainted(false);
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setMaximumSize(new java.awt.Dimension(30, 30));
-        jButton4.setMinimumSize(new java.awt.Dimension(30, 30));
-        jButton4.setPreferredSize(new java.awt.Dimension(30, 30));
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel4.add(jButton4);
-
-        jButton5.setBorderPainted(false);
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setMaximumSize(new java.awt.Dimension(30, 30));
-        jButton5.setMinimumSize(new java.awt.Dimension(30, 30));
-        jButton5.setPreferredSize(new java.awt.Dimension(30, 30));
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel4.add(jButton5);
+        btnNewFolder.setBackground(new java.awt.Color(51, 255, 102));
+        btnNewFolder.setBorderPainted(false);
+        btnNewFolder.setFocusable(false);
+        btnNewFolder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNewFolder.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnNewFolder.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnNewFolder.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnNewFolder.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNewFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewFolderActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnNewFolder);
 
         jToolBar1.add(jPanel4);
 
@@ -251,10 +234,10 @@ public class MainJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void btnNotepadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNotepadMouseClicked
         // TODO add your handling code here:
-        AppController.getInstance().showTransferDialog();
-    }//GEN-LAST:event_jButton1MouseClicked
+        
+    }//GEN-LAST:event_btnNotepadMouseClicked
 
     private void btnCopyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCopyMouseClicked
         // TODO add your handling code here:
@@ -263,6 +246,16 @@ public class MainJFrame extends javax.swing.JFrame {
     private void btnRenameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRenameMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRenameMouseClicked
+
+    private void btnNotepadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotepadActionPerformed
+        // TODO add your handling code here:
+        DataController.getInstance().newTextDocument();
+    }//GEN-LAST:event_btnNotepadActionPerformed
+
+    private void btnNewFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewFolderActionPerformed
+        // TODO add your handling code here:
+        DataController.getInstance().newFolder();
+    }//GEN-LAST:event_btnNewFolderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,13 +294,10 @@ public class MainJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopy;
+    private javax.swing.JButton btnNewFolder;
+    private javax.swing.JButton btnNotepad;
     private javax.swing.JButton btnRename;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;

@@ -12,9 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.Callable;
-import javafx.util.Callback;
-import javax.swing.JTable;
 
 /**
  *

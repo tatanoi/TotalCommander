@@ -17,41 +17,45 @@ import javax.swing.JTable;
  */
 public class LoadDirectoryThread implements Runnable {
         
-        public LoadDirectoryThread(JTable table, Path path) {
-            this.table = table;
-            this.path = path;
-        }
-        
-        private volatile boolean stopRequested;
-        private Thread runThread;
-        private JTable table;
-        private Path path;
-        
-        public void run() {
-            runThread = Thread.currentThread();
-            stopRequested = false;
-            FileModel model = (FileModel)table.getModel();
-            model.clear();
-            table.setAutoCreateRowSorter(false);
-            table.setRowSorter(null);
-            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
-                for (Path p : directoryStream) {
-                    model.addRow(new FileInfo(p));
-                    if (stopRequested) {
-                        break;
-                    }
+    public LoadDirectoryThread(TablePanel panel, Path path) {
+        this.panel = panel;
+        this.path = path;
+        this.table = panel.getTable();
+    }
+
+    private volatile boolean stopRequested;
+    private TablePanel panel;
+    private Thread runThread;
+    private JTable table;
+    private Path path;
+
+    public void run() {
+        runThread = Thread.currentThread();
+        stopRequested = false;
+        panel.setStatus(false);
+        FileModel model = (FileModel)table.getModel();
+        model.clear();
+        table.setAutoCreateRowSorter(false);
+        table.setRowSorter(null);
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
+            for (Path p : directoryStream) {
+                model.addRow(new FileInfo(p));
+                if (stopRequested) {
+                    break;
                 }
-                table.setAutoCreateRowSorter(true);
-                System.out.println(path.toString() + " : " + model.getRowCount());
-            } catch (Exception ignored) { 
-                ignored.printStackTrace();
             }
-        }
-        
-        public void stopRequest() {
-            stopRequested = true;
-            if (runThread != null) {
-                runThread.interrupt();
-            }
+            table.setAutoCreateRowSorter(true);
+            panel.setStatus(true);
+            System.out.println(path.toString() + " : " + model.getRowCount());
+        } catch (Exception ignored) { 
+            ignored.printStackTrace();
         }
     }
+
+    public void stopRequest() {
+        stopRequested = true;
+        if (runThread != null) {
+            runThread.interrupt();
+        }
+    }
+}
