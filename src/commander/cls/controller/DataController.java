@@ -213,7 +213,6 @@ public class DataController {
             model.addRow(new FileInfo(newFile));
             table.scrollRectToVisible(table.getCellRect(model.getRowCount() - 1, 0, true));
             table.setRowSelectionInterval(model.getRowCount() - 1, model.getRowCount() - 1);
-            model.setCellEditable(model.getRowCount() - 1, 0, true);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
                     String.format("Cannot create %s", folderPath.toString()),

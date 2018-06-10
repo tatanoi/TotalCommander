@@ -5,6 +5,7 @@
  */
 package commander.cls;
 
+import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
 import commander.cls.datatransfer.RowTransferHandler;
 import commander.cls.file.FileInfo;
@@ -60,16 +61,14 @@ public class TablePanel extends javax.swing.JPanel {
         initComponents();
         thisPanel = this;
         history = new History();
-        
         if (DataController.getInstance().srcPanel == null) {
             DataController.getInstance().srcPanel = this;
         }
-        
         setupFocus();
         setupTable();
         setupCombobox();
         setupNavigationBar();
-        changeDirectory(Paths.get("C:/"));
+        AppController.getInstance().addPanel(this);
     }
     
     public void setupFocus() {
@@ -253,17 +252,15 @@ public class TablePanel extends javax.swing.JPanel {
     }
     
     public void setupCombobox() {
-        
+       
         comboActionListener = (ActionEvent e) -> {
             JComboBox comboBox = (JComboBox)e.getSource();
             ComboItem item = (ComboItem)comboBox.getSelectedItem();
             RootInfo fileInfo = (RootInfo)item.getValue();
+            
             if (!changeDirectory(fileInfo.path)) {
                 comboBox.setSelectedIndex(previousIndex);
-            } else {
-                jLabel1.setText("Drive size: " + fileInfo.size);
-                previousIndex = comboBox.getSelectedIndex();
-            }
+            } 
         };
         
         comboBoxDirectory.removeAllItems();
@@ -284,18 +281,6 @@ public class TablePanel extends javax.swing.JPanel {
                             path = path.toAbsolutePath();
                         }
                         changeDirectory(path);
-                        
-                        String root = currentPath.getRoot().toString();
-                        comboBoxDirectory.removeActionListener(comboActionListener);
-                        for (int i = 0; i < comboBoxDirectory.getItemCount(); i++) {
-                            System.out.println(root + " | " + comboBoxDirectory.getItemAt(i).getKey());
-                            if (comboBoxDirectory.getItemAt(i).getKey().equals(root)) {
-                                comboBoxDirectory.setSelectedIndex(i);
-                                break;
-                            }
-                        }
-                        
-                        comboBoxDirectory.addActionListener(comboActionListener);
                         textField.setText(currentPath.toString());
                     } 
                 }
@@ -328,6 +313,22 @@ public class TablePanel extends javax.swing.JPanel {
         this.currentPath = path;
         this.history.add(path);
         this.jTextField1.setText(currentPath.toString());
+        
+        // For combobox
+        comboBoxDirectory.removeActionListener(comboActionListener);
+        for (int i = 0; i < comboBoxDirectory.getItemCount(); i++) {
+            if (comboBoxDirectory.getItemAt(i).getKey().equals(path.getRoot().toString())) {
+                comboBoxDirectory.setSelectedIndex(i);
+                previousIndex = i;
+                
+                ComboItem item = (ComboItem)comboBoxDirectory.getSelectedItem();
+                RootInfo fileInfo = (RootInfo)item.getValue();
+                jLabel1.setText("Drive size: " + fileInfo.size);
+                break;
+            }
+        }
+        comboBoxDirectory.addActionListener(comboActionListener);
+        
         this.threadStop = new LoadDirectoryThread(this, path);
         
         Thread thread = new Thread(threadStop);
@@ -353,6 +354,22 @@ public class TablePanel extends javax.swing.JPanel {
         
         this.currentPath = path;
         this.jTextField1.setText(currentPath.toString());
+        // For combobox
+        comboBoxDirectory.removeActionListener(comboActionListener);
+        for (int i = 0; i < comboBoxDirectory.getItemCount(); i++) {
+            if (comboBoxDirectory.getItemAt(i).getKey().equals(path.getRoot().toString())) {
+                comboBoxDirectory.setSelectedIndex(i);
+                previousIndex = i;
+                
+                ComboItem item = (ComboItem)comboBoxDirectory.getSelectedItem();
+                RootInfo fileInfo = (RootInfo)item.getValue();
+                jLabel1.setText("Drive size: " + fileInfo.size);
+                break;
+            }
+        }
+        comboBoxDirectory.addActionListener(comboActionListener);
+        
+        
         this.threadStop = new LoadDirectoryThread(this, path);
         
         Thread thread = new Thread(threadStop);

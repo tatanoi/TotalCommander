@@ -36,7 +36,6 @@ public class History {
     public Path backward() {
         if (!history.isEmpty() && pointer - 1 >= 0) {
             pointer = pointer - 1;
-            System.out.println(pointer);
             return history.get(pointer);
         }
         return null;

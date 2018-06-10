@@ -51,7 +51,13 @@ public class FileInfo {
             size = isDirectory ? 0 : file.length();
             lastModified = new SimpleDateFormat("dd/MM/yyyy").format(new Date(file.lastModified()));
             attribute = parseAttribute(isReadable, isWriteable, isHidden);
-            icon = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
+            try {
+                icon = (ImageIcon)FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
+            }
+            catch (Exception e) {
+                System.out.print(e.getMessage());
+            }   
+            
         }
     }
     
