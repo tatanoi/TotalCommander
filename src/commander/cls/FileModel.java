@@ -8,6 +8,7 @@ package commander.cls;
 import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
 import commander.cls.file.FileInfo;
+import commander.cls.file.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
@@ -53,7 +54,7 @@ public class FileModel extends AbstractTableModel {
         switch (column) {
             case 0: return "Name";
             case 1: return "Ext";
-            case 2: return "Size";
+            case 2: return String.format("Size (%s)", AppController.getInstance().getSizeUnitSymbol());
             case 3: return "Date";
             case 4: return "Attr";
         }
@@ -64,10 +65,11 @@ public class FileModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object value = "??";
         FileInfo fileInfo = files.get(rowIndex);
+        long size = FileUtils.convertSize(fileInfo.size, AppController.getInstance().getSizeUnit());
         switch (columnIndex) {
             case 0: value = fileInfo.name; break;
             case 1: value = fileInfo.extension; break;
-            case 2: value = fileInfo.size > 0 ? fileInfo.size : null; break;
+            case 2: value = size >= 0 ? size : null; break;
             case 3: value = fileInfo.lastModified; break;
             case 4: value = fileInfo.attribute; break;
         }
@@ -79,7 +81,7 @@ public class FileModel extends AbstractTableModel {
         switch (column) {
             case 0: return String.class;
             case 1: return String.class;
-            case 2: return Long.class;
+            case 2: return Float.class;
             case 3: return String.class;
             case 4: return String.class;
         }

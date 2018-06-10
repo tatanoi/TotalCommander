@@ -6,6 +6,8 @@
 package commander.cls.controller;
 
 import commander.MainJFrame;
+import commander.cls.Enums;
+import commander.cls.FileModel;
 import commander.cls.TablePanel;
 import commander.cls.file.FileInfo;
 import java.io.BufferedReader;
@@ -50,11 +52,17 @@ public class AppController {
     private ArrayList<String> listPath;
     private ArrayList<TablePanel> listPanel;
     
+    private Enums.DragMode dragMode;
+    private Enums.SizeUnit sizeUnit;
+    
     public AppController() {
         listItem = new ArrayList<>();
         listPanel = new ArrayList<>();
         listPath = new ArrayList<>();
         transferPanel = new TransferPanel();
+        dragMode = Enums.DragMode.Copy;
+        sizeUnit = Enums.SizeUnit.Byte;
+        
         readFile();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
@@ -65,6 +73,40 @@ public class AppController {
                 }
             }
         }));
+    }
+    
+    public void setDragMode(Enums.DragMode mode) {
+        dragMode = mode;
+    }
+    
+    public Enums.DragMode getDragMode() {
+        return dragMode;
+    }
+    
+    public void setSizeUnit(Enums.SizeUnit unit) {
+        this.sizeUnit = unit;
+        this.listPanel.forEach(p -> {
+            p.updateDriveSizeText();
+            FileModel model = (FileModel)p.getTable().getModel();
+            p.getTable().getColumnModel().getColumn(2).setHeaderValue("Size (" + getSizeUnitSymbol() + ")");
+            p.getTable().getTableHeader().repaint();
+            model.fireTableDataChanged();
+        });
+        
+    }
+    
+    public Enums.SizeUnit getSizeUnit() {
+        return this.sizeUnit;
+    }
+    
+    public String getSizeUnitSymbol() {
+        switch (sizeUnit) {
+            case Byte: return "B";
+            case KiloByte: return "KB";
+            case MegaByte: return "MB";
+            case GigaByte: return "GB";
+        }
+        return "B";
     }
     
     public void addPanel(TablePanel panel) {
@@ -88,6 +130,10 @@ public class AppController {
     // Show all item we're going to transfer
     public void showTransferDialog() {
         transferPanel.showDialog(DataController.getInstance().getListItem(), "AAA", 0);
+    }
+    
+    public void showSettingsPanel() {
+        
     }
     
     public TransferPanel getTransferPanel() {

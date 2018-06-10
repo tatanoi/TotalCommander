@@ -9,6 +9,7 @@ import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
 import commander.cls.datatransfer.RowTransferHandler;
 import commander.cls.file.FileInfo;
+import commander.cls.file.FileUtils;
 import commander.cls.file.History;
 import java.awt.Color;
 import java.awt.Component;
@@ -320,10 +321,7 @@ public class TablePanel extends javax.swing.JPanel {
             if (comboBoxDirectory.getItemAt(i).getKey().equals(path.getRoot().toString())) {
                 comboBoxDirectory.setSelectedIndex(i);
                 previousIndex = i;
-                
-                ComboItem item = (ComboItem)comboBoxDirectory.getSelectedItem();
-                RootInfo fileInfo = (RootInfo)item.getValue();
-                jLabel1.setText("Drive size: " + fileInfo.size);
+                updateDriveSizeText();
                 break;
             }
         }
@@ -334,6 +332,13 @@ public class TablePanel extends javax.swing.JPanel {
         Thread thread = new Thread(threadStop);
         thread.start();
         return true;
+    }
+    
+    public void updateDriveSizeText() {
+        ComboItem item = (ComboItem)comboBoxDirectory.getSelectedItem();
+        RootInfo fileInfo = (RootInfo)item.getValue();
+        jLabel1.setText("Drive size: " + FileUtils.convertSize(fileInfo.size, AppController.getInstance().getSizeUnit()) + 
+                " " + AppController.getInstance().getSizeUnitSymbol());
     }
     
     public boolean changeDirectoryByHistory(Path path) {
@@ -360,10 +365,7 @@ public class TablePanel extends javax.swing.JPanel {
             if (comboBoxDirectory.getItemAt(i).getKey().equals(path.getRoot().toString())) {
                 comboBoxDirectory.setSelectedIndex(i);
                 previousIndex = i;
-                
-                ComboItem item = (ComboItem)comboBoxDirectory.getSelectedItem();
-                RootInfo fileInfo = (RootInfo)item.getValue();
-                jLabel1.setText("Drive size: " + fileInfo.size);
+                updateDriveSizeText();
                 break;
             }
         }

@@ -48,7 +48,7 @@ public class FileInfo {
             
             name = file.getName();
             extension = isDirectory ? "[DIR]" : parseExtension(name);
-            size = isDirectory ? 0 : file.length();
+            size = isDirectory ? -1 : file.length();
             lastModified = new SimpleDateFormat("dd/MM/yyyy").format(new Date(file.lastModified()));
             attribute = parseAttribute(isReadable, isWriteable, isHidden);
             try {

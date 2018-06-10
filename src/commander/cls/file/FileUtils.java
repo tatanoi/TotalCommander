@@ -1,5 +1,6 @@
 package commander.cls.file;
 
+import commander.cls.Enums;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 
@@ -95,5 +96,19 @@ public class FileUtils {
 
         // Return the buffered image
         return bimage;
+    }
+   
+    public static long convertSize(long bytes, Enums.SizeUnit unit) {
+        if (bytes == -1) { 
+            return bytes; 
+        }
+        
+        switch (unit) {
+            case Byte: return (long)Math.round((double)bytes);
+            case KiloByte: return (long)Math.round((double)bytes / 1024);
+            case MegaByte: return (long)Math.round((double)bytes / 1024 / 1024); 
+            case GigaByte: return (long)Math.round((double)bytes / 1024 / 1024 / 1024);
+        }
+        return bytes;
     }
 }

@@ -70,7 +70,7 @@ public class RowTransferHandler extends TransferHandler {
             DataController.getInstance().setDestinationPanel(panel);
             AppController.getInstance()
                     .getTransferPanel()
-                    .showDialog(DataController.getInstance().srcPanel, panel, rows, 0);
+                    .showDialog(DataController.getInstance().srcPanel, panel, rows, AppController.getInstance().getDragMode());
             return true;
         }
         catch (Exception e) {

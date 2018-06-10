@@ -7,6 +7,7 @@ package commander;
 
 import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
+import commander.cls.controller.SettingsPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -44,7 +45,7 @@ public class MainJFrame extends javax.swing.JFrame {
         btnUnZip = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         btnSettings = new javax.swing.JButton();
-        btnAbout1 = new javax.swing.JButton();
+        btnHelp = new javax.swing.JButton();
         btnAbout = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -73,9 +74,9 @@ public class MainJFrame extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setFocusTraversalPolicyProvider(true);
         jToolBar1.setMargin(new java.awt.Insets(0, 2, 0, 0));
-        jToolBar1.setMaximumSize(new java.awt.Dimension(65584, 35));
-        jToolBar1.setMinimumSize(new java.awt.Dimension(63, 35));
-        jToolBar1.setPreferredSize(new java.awt.Dimension(63, 35));
+        jToolBar1.setMaximumSize(new java.awt.Dimension(65584, 40));
+        jToolBar1.setMinimumSize(new java.awt.Dimension(63, 40));
+        jToolBar1.setPreferredSize(new java.awt.Dimension(63, 40));
 
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -181,7 +182,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel4.add(jPanel11);
 
         btnSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Settings-icon.png"))); // NOI18N
-        btnSettings.setToolTipText("New folder");
+        btnSettings.setToolTipText("Settings");
         btnSettings.setBorderPainted(false);
         btnSettings.setFocusable(false);
         btnSettings.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -196,24 +197,24 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jPanel4.add(btnSettings);
 
-        btnAbout1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Help-icon.png"))); // NOI18N
-        btnAbout1.setToolTipText("Help");
-        btnAbout1.setBorderPainted(false);
-        btnAbout1.setFocusable(false);
-        btnAbout1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAbout1.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnAbout1.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnAbout1.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnAbout1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAbout1.addActionListener(new java.awt.event.ActionListener() {
+        btnHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Help-icon.png"))); // NOI18N
+        btnHelp.setToolTipText("Help");
+        btnHelp.setBorderPainted(false);
+        btnHelp.setFocusable(false);
+        btnHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnHelp.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnHelp.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnHelp.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnHelp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnHelp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAbout1ActionPerformed(evt);
+                btnHelpActionPerformed(evt);
             }
         });
-        jPanel4.add(btnAbout1);
+        jPanel4.add(btnHelp);
 
         btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Actions-help-about-icon.png"))); // NOI18N
-        btnAbout.setToolTipText("New folder");
+        btnAbout.setToolTipText("About");
         btnAbout.setBorderPainted(false);
         btnAbout.setFocusable(false);
         btnAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -424,6 +425,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void btnSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettingsActionPerformed
         // TODO add your handling code here:
+        SettingsPanel.getInstance().setSettingsVisible(true);
     }//GEN-LAST:event_btnSettingsActionPerformed
 
     private void btnZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZipActionPerformed
@@ -434,9 +436,9 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUnZipActionPerformed
 
-    private void btnAbout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbout1ActionPerformed
+    private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelpActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAbout1ActionPerformed
+    }//GEN-LAST:event_btnHelpActionPerformed
 
     private void radioHiddenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHiddenActionPerformed
         // TODO add your handling code here:
@@ -488,9 +490,9 @@ public class MainJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbout;
-    private javax.swing.JButton btnAbout1;
     private javax.swing.JButton btnCopy;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnHelp;
     private javax.swing.JButton btnMove;
     private javax.swing.JButton btnNewFolder;
     private javax.swing.JButton btnNotepad;

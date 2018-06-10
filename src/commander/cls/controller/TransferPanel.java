@@ -5,6 +5,7 @@
  */
 package commander.cls.controller;
 
+import commander.cls.Enums;
 import commander.cls.FileModel;
 import commander.cls.TablePanel;
 import commander.cls.file.FileInfo;
@@ -183,11 +184,11 @@ public class TransferPanel extends javax.swing.JPanel {
         dialogTransfer.setVisible(true);
     }
     
-    public void showDialog(TablePanel src, TablePanel des, ArrayList<Integer> rows, int type) {
+    public void showDialog(TablePanel src, TablePanel des, ArrayList<Integer> rows, Enums.DragMode mode) {
         if (rows.size() > 0 && !src.getPath().equals(des.getPath())) {
             Collections.sort(rows, Collections.reverseOrder());
             labelTransferItem.setText("Transfer " + rows.size() + " item(s) to:");
-            cbTransferOption.setSelectedIndex(type < 0 || type > 1 ? 0 : type);
+            cbTransferOption.setSelectedItem(mode.toString());
             textTransferDestination.setText(des.getPath().toString());
             
             final FileModel srcModel = (FileModel)src.getTable().getModel();
