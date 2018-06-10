@@ -7,6 +7,8 @@ package commander;
 
 import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -50,11 +52,12 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         tablePanel1 = new commander.cls.TablePanel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
         btnCopy = new javax.swing.JButton();
+        btnMove = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         btnRename = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
         tablePanel3 = new commander.cls.TablePanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -63,7 +66,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UIT Total Commander");
-        setMinimumSize(new java.awt.Dimension(600, 400));
+        setMinimumSize(new java.awt.Dimension(1000, 600));
         setPreferredSize(new java.awt.Dimension(1000, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -267,22 +270,27 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(50, 200));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.PAGE_AXIS));
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 104, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(jPanel5);
-
         java.awt.FlowLayout flowLayout2 = new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 1, 1);
         flowLayout2.setAlignOnBaseline(true);
         jPanel7.setLayout(flowLayout2);
+
+        jPanel8.setMaximumSize(new java.awt.Dimension(32767, 80));
+        jPanel8.setMinimumSize(new java.awt.Dimension(0, 80));
+        jPanel8.setPreferredSize(new java.awt.Dimension(50, 80));
+        jPanel8.setRequestFocusEnabled(false);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 80, Short.MAX_VALUE)
+        );
+
+        jPanel7.add(jPanel8);
 
         btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/copy-icon.png"))); // NOI18N
         btnCopy.setToolTipText("Copy");
@@ -300,6 +308,40 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
         jPanel7.add(btnCopy);
+
+        btnMove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/cut.png"))); // NOI18N
+        btnMove.setToolTipText("Move");
+        btnMove.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnMove.setBorderPainted(false);
+        btnMove.setFocusable(false);
+        btnMove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMove.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnMove.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnMove.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnMove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMoveMouseClicked(evt);
+            }
+        });
+        jPanel7.add(btnMove);
+
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_grey_18x18.png"))); // NOI18N
+        btnDelete.setToolTipText("Delete");
+        btnDelete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnDelete.setBorderPainted(false);
+        btnDelete.setFocusable(false);
+        btnDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDelete.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnDelete.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnDelete.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteMouseClicked(evt);
+            }
+        });
+        jPanel7.add(btnDelete);
 
         btnRename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/rename-icon.png"))); // NOI18N
         btnRename.setToolTipText("Rename");
@@ -319,19 +361,6 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel7.add(btnRename);
 
         jPanel2.add(jPanel7);
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 104, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(jPanel6);
 
         jPanel1.add(jPanel2);
         jPanel1.add(tablePanel3);
@@ -378,6 +407,19 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
         // TODO add your handling code here:
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("res/uit.png"));
+        JOptionPane.showMessageDialog(
+                null,
+                "LỚP SE330.I21\n" +
+                "ĐỒ ÁN MÔN HỌC NGÔN NGỮ LẬP TRÌNH JAVA\n\n" + 
+                "GV: Huỳnh Tuấn Anh\n\n"+
+                "Sinh viên thực hiện:\n" +
+                " 14520404 - Đinh Hoàng Khang\n" +
+                " 14520556 - Nguyễn Thanh Nam\n"
+                , 
+                "About",
+                JOptionPane.INFORMATION_MESSAGE,
+                icon);
     }//GEN-LAST:event_btnAboutActionPerformed
 
     private void btnSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettingsActionPerformed
@@ -400,6 +442,14 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         AppController.getInstance().setShowHidden(radioHidden.isSelected());
     }//GEN-LAST:event_radioHiddenActionPerformed
+
+    private void btnDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteMouseClicked
+
+    private void btnMoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMoveMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMoveMouseClicked
 
     /**
      * @param args the command line arguments
@@ -440,6 +490,8 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAbout;
     private javax.swing.JButton btnAbout1;
     private javax.swing.JButton btnCopy;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnMove;
     private javax.swing.JButton btnNewFolder;
     private javax.swing.JButton btnNotepad;
     private javax.swing.JButton btnRename;
@@ -456,9 +508,8 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JRadioButton radioHidden;
