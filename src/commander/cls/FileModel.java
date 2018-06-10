@@ -5,6 +5,7 @@
  */
 package commander.cls;
 
+import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
 import commander.cls.file.FileInfo;
 import java.io.File;
@@ -130,9 +131,11 @@ public class FileModel extends AbstractTableModel {
     }
     
     public void addRow(FileInfo fileInfo) {
-        this.files.add(fileInfo);
-        this.editableCells.add(new boolean[getColumnCount()]);
-        this.fireTableRowsInserted(files.size() - 1, files.size() - 1);
+        if (!fileInfo.isHidden || (fileInfo.isHidden && AppController.getInstance().getShowHidden())) {
+            this.files.add(fileInfo);
+            this.editableCells.add(new boolean[getColumnCount()]);
+            this.fireTableRowsInserted(files.size() - 1, files.size() - 1);
+        }
     }
     
     public void clear() {

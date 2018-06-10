@@ -20,6 +20,7 @@ public class MainJFrame extends javax.swing.JFrame {
     public MainJFrame() {
         initComponents();
         AppController.getInstance().setParent(this);
+        this.radioHidden.setSelected(AppController.getInstance().getShowHidden());
         this.setLocationRelativeTo(null);
     }
  
@@ -36,6 +37,16 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         btnNotepad = new javax.swing.JButton();
         btnNewFolder = new javax.swing.JButton();
+        jPanel10 = new javax.swing.JPanel();
+        btnZip = new javax.swing.JButton();
+        btnUnZip = new javax.swing.JButton();
+        jPanel11 = new javax.swing.JPanel();
+        btnSettings = new javax.swing.JButton();
+        btnAbout1 = new javax.swing.JButton();
+        btnAbout = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        radioHidden = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         tablePanel1 = new commander.cls.TablePanel();
         jPanel2 = new javax.swing.JPanel();
@@ -51,6 +62,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("UIT Total Commander");
         setMinimumSize(new java.awt.Dimension(600, 400));
         setPreferredSize(new java.awt.Dimension(1000, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -100,6 +112,147 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
         jPanel4.add(btnNewFolder);
+
+        jPanel10.setMaximumSize(new java.awt.Dimension(25, 20));
+        jPanel10.setMinimumSize(new java.awt.Dimension(25, 20));
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 25, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(jPanel10);
+
+        btnZip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/compress.png"))); // NOI18N
+        btnZip.setToolTipText("Compress");
+        btnZip.setBorderPainted(false);
+        btnZip.setFocusable(false);
+        btnZip.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnZip.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnZip.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnZip.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnZip.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnZip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZipActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnZip);
+
+        btnUnZip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/uncompress.png"))); // NOI18N
+        btnUnZip.setToolTipText("Uncompress");
+        btnUnZip.setBorderPainted(false);
+        btnUnZip.setFocusable(false);
+        btnUnZip.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnUnZip.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnUnZip.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnUnZip.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnUnZip.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUnZip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnZipActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnUnZip);
+
+        jPanel11.setMaximumSize(new java.awt.Dimension(25, 20));
+        jPanel11.setMinimumSize(new java.awt.Dimension(25, 20));
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 25, Short.MAX_VALUE)
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(jPanel11);
+
+        btnSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Settings-icon.png"))); // NOI18N
+        btnSettings.setToolTipText("New folder");
+        btnSettings.setBorderPainted(false);
+        btnSettings.setFocusable(false);
+        btnSettings.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSettings.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnSettings.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnSettings.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnSettings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSettingsActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnSettings);
+
+        btnAbout1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Help-icon.png"))); // NOI18N
+        btnAbout1.setToolTipText("Help");
+        btnAbout1.setBorderPainted(false);
+        btnAbout1.setFocusable(false);
+        btnAbout1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAbout1.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnAbout1.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnAbout1.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnAbout1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAbout1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbout1ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnAbout1);
+
+        btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Actions-help-about-icon.png"))); // NOI18N
+        btnAbout.setToolTipText("New folder");
+        btnAbout.setBorderPainted(false);
+        btnAbout.setFocusable(false);
+        btnAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAbout.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnAbout.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnAbout.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnAbout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAboutActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnAbout);
+
+        jPanel9.setMaximumSize(new java.awt.Dimension(25, 20));
+        jPanel9.setMinimumSize(new java.awt.Dimension(25, 20));
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 25, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(jPanel9);
+
+        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
+
+        radioHidden.setText("Hidden");
+        radioHidden.setFocusPainted(false);
+        radioHidden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioHiddenActionPerformed(evt);
+            }
+        });
+        jPanel3.add(radioHidden);
+
+        jPanel4.add(jPanel3);
 
         jToolBar1.add(jPanel4);
 
@@ -223,6 +376,31 @@ public class MainJFrame extends javax.swing.JFrame {
         DataController.getInstance().newFolder();
     }//GEN-LAST:event_btnNewFolderActionPerformed
 
+    private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAboutActionPerformed
+
+    private void btnSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettingsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSettingsActionPerformed
+
+    private void btnZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZipActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnZipActionPerformed
+
+    private void btnUnZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnZipActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUnZipActionPerformed
+
+    private void btnAbout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbout1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAbout1ActionPerformed
+
+    private void radioHiddenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHiddenActionPerformed
+        // TODO add your handling code here:
+        AppController.getInstance().setShowHidden(radioHidden.isSelected());
+    }//GEN-LAST:event_radioHiddenActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -259,21 +437,31 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAbout;
+    private javax.swing.JButton btnAbout1;
     private javax.swing.JButton btnCopy;
     private javax.swing.JButton btnNewFolder;
     private javax.swing.JButton btnNotepad;
     private javax.swing.JButton btnRename;
+    private javax.swing.JButton btnSettings;
+    private javax.swing.JButton btnUnZip;
+    private javax.swing.JButton btnZip;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JRadioButton radioHidden;
     private commander.cls.TablePanel tablePanel1;
     private commander.cls.TablePanel tablePanel3;
     // End of variables declaration//GEN-END:variables

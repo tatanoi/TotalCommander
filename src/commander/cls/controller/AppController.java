@@ -19,8 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.swing.JFrame;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -44,7 +42,8 @@ public class AppController {
     private MainJFrame parent;
     private ArrayList<FileInfo> listItem;    // List item we're going to transfer
     private TransferPanel transferPanel;
-    
+    private boolean isShowHidden;
+            
     private final String fileName = "localCache.ini";
     private final String defaultPath = "C:/";
     
@@ -148,5 +147,16 @@ public class AppController {
             }
             writer.close();
         } catch (IOException ignored) { }
+    }
+    
+    public void setShowHidden(boolean hidden) {
+        if (isShowHidden != hidden) {
+            isShowHidden = hidden;
+            listPanel.forEach(p -> p.reload());
+        }
+    }
+    
+    public boolean getShowHidden() {
+        return isShowHidden;
     }
 }
