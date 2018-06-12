@@ -5,11 +5,24 @@
  */
 package commander;
 
+import commander.cls.Enums;
+import commander.cls.FileModel;
+import commander.cls.TablePanel;
 import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
+import commander.cls.controller.InputPanel;
+import commander.cls.controller.RenamePanel;
 import commander.cls.controller.SettingsPanel;
+import commander.cls.controller.TransferPanel;
+import commander.cls.file.FileInfo;
+import commander.cls.file.MyFileUtils;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
@@ -45,7 +58,6 @@ public class MainJFrame extends javax.swing.JFrame {
         btnUnZip = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         btnSettings = new javax.swing.JButton();
-        btnHelp = new javax.swing.JButton();
         btnAbout = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -63,7 +75,6 @@ public class MainJFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UIT Total Commander");
@@ -81,7 +92,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         btnNotepad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/notepad-icon.png"))); // NOI18N
-        btnNotepad.setToolTipText("New txt fle");
+        btnNotepad.setToolTipText("New text document");
         btnNotepad.setBorderPainted(false);
         btnNotepad.setFocusable(false);
         btnNotepad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -134,7 +145,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel4.add(jPanel10);
 
         btnZip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/compress.png"))); // NOI18N
-        btnZip.setToolTipText("Compress");
+        btnZip.setToolTipText("Compress files or folders");
         btnZip.setBorderPainted(false);
         btnZip.setFocusable(false);
         btnZip.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -150,7 +161,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel4.add(btnZip);
 
         btnUnZip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/uncompress.png"))); // NOI18N
-        btnUnZip.setToolTipText("Uncompress");
+        btnUnZip.setToolTipText("Uncompress files or folders");
         btnUnZip.setBorderPainted(false);
         btnUnZip.setFocusable(false);
         btnUnZip.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -197,24 +208,8 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jPanel4.add(btnSettings);
 
-        btnHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Help-icon.png"))); // NOI18N
-        btnHelp.setToolTipText("Help");
-        btnHelp.setBorderPainted(false);
-        btnHelp.setFocusable(false);
-        btnHelp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnHelp.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnHelp.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnHelp.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnHelp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnHelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHelpActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnHelp);
-
         btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Actions-help-about-icon.png"))); // NOI18N
-        btnAbout.setToolTipText("About");
+        btnAbout.setToolTipText("About us");
         btnAbout.setBorderPainted(false);
         btnAbout.setFocusable(false);
         btnAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -248,6 +243,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
 
         radioHidden.setText("Hidden");
+        radioHidden.setToolTipText("Show hidden files or folders");
         radioHidden.setFocusPainted(false);
         radioHidden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -284,7 +280,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,7 +290,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel7.add(jPanel8);
 
         btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/copy-icon.png"))); // NOI18N
-        btnCopy.setToolTipText("Copy");
+        btnCopy.setToolTipText("Copy files or folders");
         btnCopy.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnCopy.setBorderPainted(false);
         btnCopy.setFocusable(false);
@@ -308,10 +304,15 @@ public class MainJFrame extends javax.swing.JFrame {
                 btnCopyMouseClicked(evt);
             }
         });
+        btnCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyActionPerformed(evt);
+            }
+        });
         jPanel7.add(btnCopy);
 
         btnMove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/cut.png"))); // NOI18N
-        btnMove.setToolTipText("Move");
+        btnMove.setToolTipText("Move files or folders");
         btnMove.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnMove.setBorderPainted(false);
         btnMove.setFocusable(false);
@@ -328,7 +329,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel7.add(btnMove);
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/delete_grey_18x18.png"))); // NOI18N
-        btnDelete.setToolTipText("Delete");
+        btnDelete.setToolTipText("Delete files or folders");
         btnDelete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnDelete.setBorderPainted(false);
         btnDelete.setFocusable(false);
@@ -345,7 +346,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel7.add(btnDelete);
 
         btnRename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/rename-icon.png"))); // NOI18N
-        btnRename.setToolTipText("Rename");
+        btnRename.setToolTipText("Rename multiple files or folders");
         btnRename.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnRename.setBorderPainted(false);
         btnRename.setFocusable(false);
@@ -359,6 +360,11 @@ public class MainJFrame extends javax.swing.JFrame {
                 btnRenameMouseClicked(evt);
             }
         });
+        btnRename.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRenameActionPerformed(evt);
+            }
+        });
         jPanel7.add(btnRename);
 
         jPanel2.add(jPanel7);
@@ -370,13 +376,16 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenuItem1.setText("jMenuItem1");
+        jMenuItem1.setText("Exit");
+        jMenuItem1.setToolTipText("");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -430,15 +439,85 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void btnZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZipActionPerformed
         // TODO add your handling code here:
+        
+        TablePanel panel = DataController.getInstance().getSourcePanel();
+        JTable table = DataController.getInstance().getSourcePanel().getTable();
+        FileModel model = (FileModel)table.getModel();
+        final int[] rows = table.getSelectedRows();
+        if (rows.length > 0) {
+            FileInfo f = model.getRow(table.convertRowIndexToModel(rows[0]));
+            int start = f.file.getName().lastIndexOf(".");
+            String zipName = !f.isDirectory && start > 0 ? f.file.getName().substring(0, start) : f.file.getName();
+            
+            InputPanel.getInstance().showDialog(
+                "Compress files...", 
+                "Compress as zip file with name (without .zip) :", 
+                zipName, 
+                () -> {
+                    JTextField tf = InputPanel.getInstance().getTextField();
+                    JDialog d = InputPanel.getInstance().getDialog();
+                    if (tf.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Text field cannot be blank");
+                    }
+                    else {
+                        try {
+                            DataController.getInstance().zipFileFromTable(tf.getText(), rows);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        d.setVisible(false);
+                    }
+                });
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "You select nothing", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnZipActionPerformed
 
     private void btnUnZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnZipActionPerformed
         // TODO add your handling code here:
+        
+        
+        TablePanel panel = DataController.getInstance().getSourcePanel();
+        FileModel model = (FileModel)panel.getTable().getModel();
+        JTable table = DataController.getInstance().getSourcePanel().getTable();
+        final int row = table.getSelectedRow();
+        FileInfo f = model.getRow(table.convertRowIndexToModel(row));
+        int start = f.file.getName().lastIndexOf(".zip");
+        String folderName = start > 0 ? f.file.getName().substring(0, start) : f.file.getName();
+        
+        if (row != -1) {
+            if (!MyFileUtils.isArchive(f.file)) { 
+                JOptionPane.showMessageDialog(null, "File cannot be decompressed", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            InputPanel.getInstance().showDialog(
+                "Decompress files...", 
+                "Decompress files to folder :", 
+                folderName, 
+                () -> {
+                    JTextField tf = InputPanel.getInstance().getTextField();
+                    JDialog d = InputPanel.getInstance().getDialog();
+                    if (tf.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Text field cannot be blank");
+                    }
+                    else {
+                        try {
+                            DataController.getInstance().unZipFileFromTable(tf.getText(), row);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        d.setVisible(false);
+                    }
+                });
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "You select nothing", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnUnZipActionPerformed
-
-    private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelpActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHelpActionPerformed
 
     private void radioHiddenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHiddenActionPerformed
         // TODO add your handling code here:
@@ -447,11 +526,56 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void btnDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMouseClicked
         // TODO add your handling code here:
+        
+        JTable table = DataController.getInstance().getSourcePanel().getTable();
+        int[] selectedRows = table.getSelectedRows();
+        
+        if (selectedRows.length > 0) {
+            int res = JOptionPane.showOptionDialog(null, "Do you want to delete selected files", "Delete...", JOptionPane.CANCEL_OPTION,
+            JOptionPane.WARNING_MESSAGE, null, null, null);
+            if (res == 0) {
+                ArrayList<Integer> convertRows = new ArrayList<>();
+                for (int i = 0; i < selectedRows.length; i++) {
+                    convertRows.add(table.convertRowIndexToModel(selectedRows[i]));
+                }
+                Collections.sort(convertRows, Collections.reverseOrder());
+                FileModel model = (FileModel)table.getModel();
+                for (int i = 0; i < convertRows.size(); i++) {
+                    final int r = convertRows.get(i);
+                    DataController.getInstance().deleteFile(model.getRow(r), () -> {
+                        model.removeRow(r);
+                    });
+                }
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "You select nothing", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnDeleteMouseClicked
 
     private void btnMoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMoveMouseClicked
         // TODO add your handling code here:
+        TransferPanel.getInstance().showDialog(Enums.DragMode.Cut);
     }//GEN-LAST:event_btnMoveMouseClicked
+
+    private void btnRenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRenameActionPerformed
+        // TODO add your handling code here:
+        RenamePanel.getInstance().showDialog(
+                DataController.getInstance().getSourcePanel().getTable().getSelectedRows()
+        );
+    }//GEN-LAST:event_btnRenameActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.dispose();
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
+        // TODO add your handling code here:
+        TransferPanel.getInstance().showDialog(Enums.DragMode.Copy);
+    }//GEN-LAST:event_btnCopyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,7 +616,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAbout;
     private javax.swing.JButton btnCopy;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnHelp;
     private javax.swing.JButton btnMove;
     private javax.swing.JButton btnNewFolder;
     private javax.swing.JButton btnNotepad;
@@ -501,7 +624,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnUnZip;
     private javax.swing.JButton btnZip;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;

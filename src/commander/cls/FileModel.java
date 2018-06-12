@@ -8,7 +8,7 @@ package commander.cls;
 import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
 import commander.cls.file.FileInfo;
-import commander.cls.file.FileUtils;
+import commander.cls.file.MyFileUtils;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
@@ -65,7 +65,7 @@ public class FileModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object value = "??";
         FileInfo fileInfo = files.get(rowIndex);
-        long size = FileUtils.convertSize(fileInfo.size, AppController.getInstance().getSizeUnit());
+        long size = MyFileUtils.convertSize(fileInfo.size, AppController.getInstance().getSizeUnit());
         switch (columnIndex) {
             case 0: value = fileInfo.name; break;
             case 1: value = fileInfo.extension; break;
@@ -107,7 +107,7 @@ public class FileModel extends AbstractTableModel {
         FileInfo fileInfo = this.getRow(rowIndex);
         switch (columnIndex) {
         case 0:
-            File renameFile = DataController.getInstance().renameFile(fileInfo, String.valueOf(aValue));
+            File renameFile = DataController.getInstance().renameFile(fileInfo, String.valueOf(aValue), "");
             if (renameFile != null) {
                 this.files.set(rowIndex, new FileInfo(renameFile.toPath()));
             }
@@ -138,6 +138,10 @@ public class FileModel extends AbstractTableModel {
             this.editableCells.add(new boolean[getColumnCount()]);
             this.fireTableRowsInserted(files.size() - 1, files.size() - 1);
         }
+    }
+    
+    public void setRow(int index, FileInfo fi) {
+        this.files.set(index, fi);
     }
     
     public void clear() {

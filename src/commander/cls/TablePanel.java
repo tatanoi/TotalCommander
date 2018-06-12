@@ -9,7 +9,7 @@ import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
 import commander.cls.datatransfer.RowTransferHandler;
 import commander.cls.file.FileInfo;
-import commander.cls.file.FileUtils;
+import commander.cls.file.MyFileUtils;
 import commander.cls.file.History;
 import java.awt.Color;
 import java.awt.Component;
@@ -155,22 +155,22 @@ public class TablePanel extends javax.swing.JPanel {
                         }
                     }
                 }
-                else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
-                    ArrayList<FileInfo> listItem = DataController.getInstance().getListItem();
-                    FileModel model = (FileModel)table.getModel();
-                    FileInfo data = model.getRow(table.convertRowIndexToModel(row));
-                    if (data.isReadable) {
-                        if (listItem.contains(data)) {
-                            listItem.remove(data);
-                            model.fireTableDataChanged();
-                            System.out.println("OUT");
-                        } else {
-                            listItem.add(data);
-                            model.fireTableDataChanged();
-                            System.out.println("IN");
-                        }
-                    }
-                }
+//                else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
+//                    ArrayList<FileInfo> listItem = DataController.getInstance().getListItem();
+//                    FileModel model = (FileModel)table.getModel();
+//                    FileInfo data = model.getRow(table.convertRowIndexToModel(row));
+//                    if (data.isReadable) {
+//                        if (listItem.contains(data)) {
+//                            listItem.remove(data);
+//                            model.fireTableDataChanged();
+//                            System.out.println("OUT");
+//                        } else {
+//                            listItem.add(data);
+//                            model.fireTableDataChanged();
+//                            System.out.println("IN");
+//                        }
+//                    }
+//                }
             }
         });
         jTable1.addKeyListener(new KeyAdapter() {
@@ -192,7 +192,7 @@ public class TablePanel extends javax.swing.JPanel {
                             catch (Exception ex) { }
                         }
                     }
-                    else if (e.getKeyCode() == KeyEvent.VK_F12) {
+                    else if (e.getKeyCode() == KeyEvent.VK_F2) {
                         FileModel model = (FileModel)table.getModel();
                         row = table.convertRowIndexToModel(row);
                         FileInfo f = model.getRow(row);
@@ -337,7 +337,7 @@ public class TablePanel extends javax.swing.JPanel {
     public void updateDriveSizeText() {
         ComboItem item = (ComboItem)comboBoxDirectory.getSelectedItem();
         RootInfo fileInfo = (RootInfo)item.getValue();
-        jLabel1.setText("Drive size: " + FileUtils.convertSize(fileInfo.size, AppController.getInstance().getSizeUnit()) + 
+        jLabel1.setText("Drive size: " + MyFileUtils.convertSize(fileInfo.size, AppController.getInstance().getSizeUnit()) + 
                 " " + AppController.getInstance().getSizeUnitSymbol());
     }
     

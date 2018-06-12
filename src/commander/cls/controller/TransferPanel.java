@@ -12,7 +12,10 @@ import commander.cls.file.FileInfo;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -20,6 +23,13 @@ import java.util.Collections;
  */
 public class TransferPanel extends javax.swing.JPanel {
 
+    private static TransferPanel instance;
+    public static TransferPanel getInstance() {
+        if (instance == null) {
+            instance = new TransferPanel();
+        }
+        return instance;
+    }
     /**
      * Creates new form TransferPanel
      */
@@ -220,6 +230,27 @@ public class TransferPanel extends javax.swing.JPanel {
             dialogTransfer.setLocationRelativeTo(AppController.getInstance().getParent());
             dialogTransfer.setVisible(true);
         }
+        else {
+            JOptionPane.showMessageDialog(null, "You select nothing", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void showDialog(ArrayList<Integer> rows, Enums.DragMode mode) {
+        TablePanel srcPanel = DataController.getInstance().getSourcePanel();
+        TablePanel desPanel = DataController.getInstance().getDesPanel();
+        showDialog(srcPanel, desPanel, rows, mode);
+    }
+    
+    public void showDialog(Enums.DragMode mode) {        
+        TablePanel srcPanel = DataController.getInstance().getSourcePanel();
+        TablePanel desPanel = DataController.getInstance().getDesPanel();
+        JTable table = srcPanel.getTable();
+        ArrayList<Integer> rows = new ArrayList<>();
+        int[] rowArray = DataController.getInstance().getSourcePanel().getTable().getSelectedRows();
+        for (int i = 0; i < rowArray.length; i++) {
+            rows.add(table.convertRowIndexToModel(rowArray[i]));
+        }
+        showDialog(srcPanel, desPanel, rows, mode);
     }
     
     private Runnable transferCallback;

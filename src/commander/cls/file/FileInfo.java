@@ -61,6 +61,10 @@ public class FileInfo {
         }
     }
     
+    public void updateByFile() {
+        init(file.toPath());
+    }
+    
     @Override
     public String toString() {
         if (path != null) {
@@ -82,8 +86,8 @@ public class FileInfo {
     
     private static String parseAttribute(boolean r, boolean w, boolean h) {
         String attr = "";
-        attr += r ? "R" : "-";
-        attr += w ? "W" : "-";
+        attr += !r ? "R" : "-";
+        attr += !w ? "W" : "-";
         attr += h ? "H" : "-";
         return attr;
     }

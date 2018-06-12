@@ -8,7 +8,9 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +18,7 @@ import java.nio.file.attribute.FileTime;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class FileUtils {
+public class MyFileUtils {
 
     private static final String NullString = "<NUL>";
 
@@ -29,8 +31,21 @@ public class FileUtils {
         return NullString;
     }
 
+    public static boolean isArchive(File f) {
+        int fileSignature = 0;
+        RandomAccessFile raf = null;
+        try {
+            raf = new RandomAccessFile(f, "r");
+            fileSignature = raf.readInt();
+            raf.close();
+        } catch (IOException e) {
+            // handle if you like
+        }
+        return fileSignature == 0x504B0304 || fileSignature == 0x504B0506 || fileSignature == 0x504B0708;
+    }
+    
     public static String getName(String stringPath) {
-        return FileUtils.getName(Paths.get(stringPath));
+        return MyFileUtils.getName(Paths.get(stringPath));
     }
 
     public static String getExtension(Path path) {
@@ -49,7 +64,7 @@ public class FileUtils {
     }
 
     public static String getExtension(String stringPath) {
-        return  FileUtils.getExtension(Paths.get(stringPath));
+        return  MyFileUtils.getExtension(Paths.get(stringPath));
     }
 
     public static String getSize(Path path) {
@@ -62,7 +77,7 @@ public class FileUtils {
     }
 
     public static String getSize(String stringPath) {
-        return FileUtils.getSize(Paths.get(stringPath));
+        return MyFileUtils.getSize(Paths.get(stringPath));
     }
 
     public static String getLastModifiedDate(Path path) {
@@ -77,7 +92,7 @@ public class FileUtils {
     }
 
     public static String getLastModifiedDate(String stringPath) {
-        return FileUtils.getLastModifiedDate(Paths.get(stringPath));
+        return MyFileUtils.getLastModifiedDate(Paths.get(stringPath));
     }
 
     public static BufferedImage toBufferedImage(Image img) {

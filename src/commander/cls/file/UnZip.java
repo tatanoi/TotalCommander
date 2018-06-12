@@ -25,51 +25,53 @@ public class UnZip
      * @param zipFile input zip file
      * @param output zip file output folder
      */
-    public void unZipIt(String zipFile, String outputFolder){
+    public File unZipIt(String zipFile, String outputFolder){
 
         byte[] buffer = new byte[1024];
 
         try{
-            //create output directory is not exists
+            // create output directory is not exists
             File folder = new File(outputFolder);
             if(!folder.exists()){
                 folder.mkdir();
             }
 
             //get the zip file content
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+            FileInputStream fis = new FileInputStream(zipFile);
+            ZipInputStream zis = new ZipInputStream(fis);
             //get the zipped file list entry
             ZipEntry ze = zis.getNextEntry();
-
             while (ze != null){
 
                 String fileName = ze.getName();
                 File newFile = new File(outputFolder + File.separator + fileName);
-
-                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
-
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                new File(newFile.getParent()).mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);             
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
+                
+                if (ze.isDirectory()) {
+                    newFile.mkdirs();
                 }
-
-                fos.close();   
+                else {
+                    System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+                    new File(newFile.getParent()).mkdirs();
+                    FileOutputStream fos = new FileOutputStream(newFile);             
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fos.close();   
+                }
                 ze = zis.getNextEntry();
             }
 
             zis.closeEntry();
             zis.close();
+            fis.close();
 
             System.out.println("Done");
+            return folder;
 
         } catch(IOException ex){
-            ex.printStackTrace(); 
+            ex.printStackTrace();
+            return null;
         }
     }    
 }

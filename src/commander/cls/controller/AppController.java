@@ -152,14 +152,14 @@ public class AppController {
     
     public Path getPath(int index) {
         if (listPath.isEmpty() || index < 0 || index > listPath.size()) {
-            return Paths.get(defaultPath);
+            return Paths.get("").toAbsolutePath();
         } 
          
         Path path = Paths.get(listPath.get(index));
         if (Files.exists(path) && Files.isDirectory(path) && Files.isReadable(path)) {
             return path;
         }
-        return Paths.get(defaultPath);
+        return Paths.get("").toAbsolutePath();
     }
     
     public void readFile() {

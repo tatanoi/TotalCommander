@@ -9,6 +9,7 @@ import commander.cls.FileModel;
 import commander.cls.TablePanel;
 import commander.cls.controller.AppController;
 import commander.cls.controller.DataController;
+import commander.cls.controller.TransferPanel;
 import commander.cls.file.FileInfo;
 import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;
@@ -44,7 +45,7 @@ public class RowTransferHandler extends TransferHandler {
         FileModel model = (FileModel)panel.getTable().getModel();
         for (int i = 0; i < selectedRows.length; i++) {
             if (model.getRow(selectedRows[i]).isReadable) {
-                listInteger.add(selectedRows[i]);
+                listInteger.add(panel.getTable().convertRowIndexToModel(selectedRows[i]));
             }
         }
         
@@ -68,9 +69,7 @@ public class RowTransferHandler extends TransferHandler {
         try {
             ArrayList<Integer> rows = (ArrayList<Integer>) info.getTransferable().getTransferData(flavor);
             DataController.getInstance().setDestinationPanel(panel);
-            AppController.getInstance()
-                    .getTransferPanel()
-                    .showDialog(DataController.getInstance().srcPanel, panel, rows, AppController.getInstance().getDragMode());
+            TransferPanel.getInstance().showDialog(rows, AppController.getInstance().getDragMode());
             return true;
         }
         catch (Exception e) {
